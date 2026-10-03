@@ -1,26 +1,12 @@
-# ⚛️ Physics Wonderland 3D (macOS Application)
+# ⚛️ Physics Wonderland 3D
 
-An interactive, animated 3D physics laboratory application designed for macOS and Google Chrome to teach students fundamental physical laws using vibrant motion, procedural 3D cartoon characters, and live mathematical calculations.
+[![Deploy to GitHub Pages](https://github.com/junksidetm/physics-wonderland/actions/workflows/deploy.yml/badge.svg)](https://github.com/junksidetm/physics-wonderland/actions/workflows/deploy.yml)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-success?style=flat&logo=github)](https://junksidetm.github.io/physics-wonderland/)
+[![Platforms](https://img.shields.io/badge/Platform-Desktop%20%7C%20Mobile%20%7C%20Tablet-blue)](#-responsive-mobile--desktop-experience)
 
----
+An interactive, animated 3D physics laboratory application built for modern browsers (desktop, mobile, and tablets) to teach students fundamental physical laws using vibrant motion, procedural 3D cartoon characters, and live mathematical calculations.
 
-## 🚀 Quick Launch
-
-### 1. In Google Chrome (Already Active)
-The app is currently served and running live in Google Chrome at:
-```
-http://localhost:8765/index.html
-```
-
-### 2. Double-Click macOS Native App
-You can also launch it directly from macOS Finder:
-```
-/Users/vaibhav/Antigravity/physics_wonderland/PhysicsWonderland.app
-```
-Or run from Terminal:
-```bash
-/Users/vaibhav/Antigravity/physics_wonderland/launch.sh
-```
+🌐 **Live Web Application**: [https://junksidetm.github.io/physics-wonderland/](https://junksidetm.github.io/physics-wonderland/)
 
 ---
 
@@ -33,8 +19,8 @@ Or run from Terminal:
 * **Orbital & Escape Velocity**:
   $$v_{circ} = \sqrt{\frac{G \cdot M}{r}}, \quad v_{esc} = \sqrt{\frac{2 \cdot G \cdot M}{r}}$$
 * **Features & Cartoons**:
-  - **Sir Isaac Newton 3D Character**: Animated 17th-century scholar with powdered wig, gold-buttoned jacket, and blinking cartoon eyes that track projectile flight.
-  - **Spacetime Curvature Grid**: Dynamic 3D rubber-sheet spacetime well warping under the planet's mass.
+  - **Sir Isaac Newton 3D Character**: Animated 17th-century scholar with powdered wig, gold-buttoned jacket, and cartoon blinking eyes that track projectile flight.
+  - **Spacetime Curvature Grid**: Dynamic 3D rubber-sheet spacetime well warping under the planet's mass in real time.
   - **Newton's Cannon**: Fire cannonballs at varying speeds. Watch them fall to Earth, enter stable elliptical/circular orbit, or escape to deep space!
   - **Apple Drop Experiment**: Drop apples to observe constant gravitational acceleration ($g$) with optional air drag.
   - **Celestial Bodies**: Switch between Earth ($1.0 M_\oplus$), Moon ($0.2 M_\oplus$), and Jupiter ($2.5 M_\oplus$).
@@ -73,6 +59,22 @@ Or run from Terminal:
 
 ---
 
+## 📱 Responsive Mobile & Desktop Experience
+
+Physics Wonderland 3D is fully responsive across all screen sizes and orientations:
+
+* **Mobile Bottom Sheet Drawer**: On mobile portrait screens, the simulation controls smoothly slide up from the bottom as an accessible bottom sheet drawer with a drag handle and glass backdrop, keeping the 3D physics scene fully visible.
+* **Floating Controls FAB**: An intuitive floating action button (`🎛️ Controls`) lets mobile students open and close simulation sliders with one thumb.
+* **Segmented Touch Navigation**: Header modules automatically collapse into a compact, thumb-friendly tab bar (`🪐 Gravity`, `💨 Bernoulli`, `💧 Torricelli`).
+* **Collapsible Live Math HUD**: The real-time formula calculation card collapses into a compact floating pill on small screens, expandable on demand.
+* **Touch-Optimized Orbit Controls**: Full multi-touch support for phones and tablets:
+  - Single-finger drag: Orbit / rotate camera angle.
+  - Two-finger pinch: Zoom in and out.
+* **Portrait Aspect-Ratio Scaling**: Three.js cameras automatically scale distance on narrow vertical screens so wide physics apparatuses (e.g., Venturi pipes and projectile trajectories) are never clipped.
+* **Touch Event Isolation**: Sliders and toggle buttons isolate touch events to prevent accidental camera rotation while fine-tuning experiment parameters.
+
+---
+
 ## 🎓 Student Learning Features
 
 * **Live Mathematical HUD**: Real-time arithmetic display showing variables plugged into formulas at 60 FPS.
@@ -81,8 +83,39 @@ Or run from Terminal:
   1. *Achieve Stable Orbit*: Find the precise velocity to circle the globe without crashing.
   2. *Takeoff Lift*: Generate sufficient aerodynamic lift to achieve airborne flight.
   3. *Max Range Bullseye*: Position the orifice to maximize the horizontal trajectory and fill Pippy's bucket.
-* **Procedural Sound Synthesizer**: Zero-dependency Web Audio API audio (cannon booms, water splashes, flight whooshes, and celebratory fanfares).
+* **Procedural Sound Synthesizer**: Zero-dependency Web Audio API audio (cannon booms, water splashes, flight whooshes, and celebratory fanfares) with mobile audio unlocking.
 * **Multi-Angle Camera Presets**:
   - 🎥 3D Cinematic Angle (Free Orbit / Pan / Zoom)
   - 📐 Front Profile / Cross-Section
   - 🛸 Top-Down View
+
+---
+
+## 🚀 Quick Launch & Local Development
+
+### Option 1: View Online (No Installation Needed)
+Visit the live GitHub Pages deployment directly:
+👉 **[https://junksidetm.github.io/physics-wonderland/](https://junksidetm.github.io/physics-wonderland/)**
+
+### Option 2: Run Locally
+Clone the repository and serve with any static web server:
+```bash
+git clone https://github.com/junksidetm/physics-wonderland.git
+cd physics-wonderland
+
+# Using Node.js npx
+npx serve .
+
+# Or using Python
+python3 -m http.server 8080
+```
+Then navigate to `http://localhost:8080` in your web browser.
+
+---
+
+## 🛠️ Technology Stack
+- **Rendering Engine:** [Three.js](https://threejs.org/) (r128 WebGL)
+- **Camera Navigation:** Three.js OrbitControls with fallback multi-touch gesture engine
+- **Audio:** Web Audio API (procedural synthesis, 0 audio assets required)
+- **Styling:** Modern Glassmorphism CSS with Material & Apple SF Pro aesthetics
+- **CI/CD Deployment:** GitHub Actions (`.github/workflows/deploy.yml`) to GitHub Pages

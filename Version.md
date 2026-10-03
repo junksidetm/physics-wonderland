@@ -36,3 +36,15 @@
   - `app.js` (Panel drawer state management, responsive camera distance scaling, touch fallback controls, audio unlocking)
   - `cartoon_renderer.js` (Mobile speech bubble auto-dismiss and reset logic)
   - `Version.md` (Created project evolution tracking)
+
+### [2026-10-04 01:01] Documentation & README Overhaul with Live Pages Verification
+- **Status:** Complete (100%)
+- **Author:** Antigravity Agent
+- **Description:** 
+  1. Updated `README.md` with official live deployment badges, GitHub Pages URL, mobile bottom sheet drawer architecture, and touch navigation documentation.
+  2. Documented multi-touch gesture controls (single-finger orbit, two-finger pinch-zoom) and portrait camera auto-scaling.
+  3. Verified live GitHub Pages HTTP response at `https://junksidetm.github.io/physics-wonderland/`.
+  4. Updated parent workspace lineage registry in `GEMINI.md`.
+- **Files Modified:**
+  - `README.md` (Overhauled documentation, live badges, cross-platform usage)
+  - `Version.md` (Appended real-time changelog entry)
