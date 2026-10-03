@@ -42,12 +42,14 @@ body {
   width: 100%;
   height: 100%;
   z-index: 1;
+  touch-action: none;
 }
 
 canvas {
   display: block;
   width: 100%;
   height: 100%;
+  touch-action: none;
 }
 
 /* App Header */
@@ -63,7 +65,12 @@ canvas {
   pointer-events: none;
 }
 
+.header-top-row {
+  display: contents;
+}
+
 .brand-badge {
+  order: 1;
   pointer-events: auto;
   display: flex;
   align-items: center;
@@ -119,6 +126,7 @@ canvas {
 
 /* Nav Modules Tabs */
 .module-nav {
+  order: 2;
   pointer-events: auto;
   display: flex;
   background: var(--dark-glass);
@@ -162,9 +170,59 @@ canvas {
   box-shadow: 0 4px 15px rgba(79, 70, 229, 0.45);
 }
 
+/* Responsive button text visibility (desktop defaults) */
+.btn-text.short-text {
+  display: none;
+}
+
+.btn-text.full-text {
+  display: inline;
+}
+
 /* Header Utilities */
 .header-actions {
+  order: 3;
   pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mobile-only-btn {
+  display: none !important;
+}
+
+.sheet-drag-handle {
+  display: none;
+}
+
+.panel-close-btn {
+  display: none;
+}
+
+.panel-backdrop {
+  display: none;
+}
+
+.mobile-controls-fab {
+  display: none;
+}
+
+.bubble-close-btn {
+  display: none;
+}
+
+.hud-toggle-icon {
+  display: none;
+}
+
+.panel-title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hud-header-left {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -845,4 +903,481 @@ canvas {
 .cam-btn.active {
   background: rgba(255, 255, 255, 0.16);
   color: #fff;
+}
+
+/* ==========================================================================
+   Responsive & Mobile Experience
+   ========================================================================== */
+
+@media (max-width: 900px) {
+  /* Safe-area Header */
+  .app-header {
+    position: absolute;
+    top: max(10px, env(safe-area-inset-top, 10px));
+    left: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 20;
+    pointer-events: none;
+  }
+
+  .header-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  .brand-badge {
+    order: initial;
+    padding: 5px 12px 5px 6px;
+    gap: 8px;
+    border-radius: 28px;
+  }
+
+  .brand-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+  }
+
+  .brand-text h1 {
+    font-size: 13.5px;
+    letter-spacing: -0.2px;
+  }
+
+  .brand-subtitle {
+    display: none;
+  }
+
+  .header-actions {
+    order: initial;
+    gap: 6px;
+  }
+
+  .icon-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 15px;
+  }
+
+  .mobile-only-btn {
+    display: flex !important;
+  }
+
+  .mobile-only-btn.active {
+    background: var(--primary);
+    box-shadow: 0 0 12px var(--primary-light);
+  }
+
+  /* Segmented Module Switcher */
+  .module-nav {
+    order: initial;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 4px;
+    gap: 4px;
+    border-radius: 20px;
+    background: var(--dark-glass);
+    box-sizing: border-box;
+  }
+
+  .module-btn {
+    flex: 1;
+    padding: 8px 4px;
+    font-size: 12px;
+    justify-content: center;
+    gap: 5px;
+    white-space: nowrap;
+    border-radius: 16px;
+  }
+
+  .btn-text.full-text {
+    display: none;
+  }
+
+  .btn-text.short-text {
+    display: inline;
+  }
+
+  /* Mobile Bottom Sheet Drawer for Controls */
+  .floating-panel {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: auto;
+    width: 100%;
+    max-width: 100%;
+    max-height: min(65vh, 480px);
+    border-radius: 24px 24px 0 0;
+    z-index: 50;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    box-shadow: 0 -12px 35px rgba(0, 0, 0, 0.65), 0 0 0 1px var(--border-glass);
+    transform: translateY(0);
+    transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.25s ease;
+    pointer-events: auto;
+  }
+
+  .floating-panel.collapsed {
+    transform: translateY(105%) !important;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .sheet-drag-handle {
+    display: block;
+    width: 40px;
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.35);
+    margin: 8px auto 2px auto;
+    cursor: grab;
+  }
+
+  .panel-header {
+    padding: 10px 16px;
+  }
+
+  .panel-close-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.12);
+    color: #cbd5e1;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .panel-close-btn:hover {
+    background: rgba(255, 255, 255, 0.22);
+    color: #fff;
+  }
+
+  .panel-scroll-content {
+    padding: 12px 16px calc(16px + env(safe-area-inset-bottom, 0px)) 16px;
+    gap: 12px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .panel-backdrop {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(3, 7, 18, 0.55);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 45;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .panel-backdrop.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Mobile Controls Floating Pill Button */
+  .mobile-controls-fab {
+    display: flex;
+    position: fixed;
+    left: 12px;
+    bottom: calc(58px + env(safe-area-inset-bottom, 0px));
+    z-index: 30;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, #4f46e5, #6366f1);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 8px 14px;
+    border-radius: 24px;
+    font-weight: 700;
+    font-size: 12px;
+    box-shadow: 0 4px 18px rgba(79, 70, 229, 0.5);
+    cursor: pointer;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s;
+  }
+
+  .mobile-controls-fab:hover,
+  .mobile-controls-fab:active {
+    transform: scale(1.05);
+  }
+
+  .mobile-controls-fab.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.8);
+  }
+
+  /* Live Math HUD */
+  .hud-math-panel {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    width: auto;
+    max-width: min(380px, calc(100vw - 24px));
+    bottom: calc(52px + env(safe-area-inset-bottom, 0px));
+    margin: 0 auto;
+    z-index: 25;
+    padding: 8px 12px;
+    border-radius: 16px;
+    transition: all 0.25s ease;
+  }
+
+  .hud-toggle-icon {
+    display: inline-block;
+    background: none;
+    border: none;
+    color: var(--secondary);
+    font-size: 10px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+
+  .hud-math-panel.collapsed .math-values-grid {
+    display: none;
+  }
+
+  .hud-math-panel.collapsed .math-equation-box {
+    padding: 4px 8px;
+    font-size: 11px;
+    margin-top: 4px;
+  }
+
+  .hud-math-panel.collapsed .hud-toggle-icon {
+    transform: rotate(-90deg);
+  }
+
+  .hud-math-panel.hidden {
+    display: none !important;
+  }
+
+  /* Camera Presets Bar */
+  .camera-bar {
+    position: fixed;
+    bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 28;
+    padding: 3px;
+    gap: 3px;
+    border-radius: 20px;
+  }
+
+  .cam-btn {
+    padding: 5px 9px;
+    font-size: 11px;
+    border-radius: 14px;
+    gap: 3px;
+  }
+
+  /* Character Box & Speech Bubble */
+  .character-box {
+    position: fixed;
+    bottom: calc(58px + env(safe-area-inset-bottom, 0px));
+    right: 12px;
+    z-index: 26;
+    align-items: flex-end;
+    gap: 8px;
+  }
+
+  .cartoon-avatar-pill {
+    padding: 3px 8px 3px 3px;
+    border-radius: 24px;
+  }
+
+  .cartoon-avatar-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 17px;
+  }
+
+  .cartoon-avatar-name {
+    font-size: 11.5px;
+  }
+
+  .cartoon-avatar-info .cartoon-avatar-status {
+    display: none;
+  }
+
+  .speech-bubble {
+    max-width: min(260px, 80vw);
+    font-size: 11.5px;
+    padding: 10px 14px;
+    border-radius: 16px 16px 2px 16px;
+  }
+
+  .bubble-close-btn {
+    display: block;
+    position: absolute;
+    top: 4px;
+    right: 6px;
+    background: none;
+    border: none;
+    color: #64748b;
+    font-size: 12px;
+    cursor: pointer;
+    padding: 2px 6px;
+  }
+
+  .bubble-close-btn:hover {
+    color: #0f172a;
+  }
+
+  .speech-bubble.hidden {
+    display: none;
+  }
+
+  /* Touch Slider Improvements */
+  .custom-range {
+    height: 8px;
+  }
+
+  .custom-range::-webkit-slider-thumb {
+    width: 24px;
+    height: 24px;
+  }
+
+  .toggle-btn {
+    padding: 9px 4px;
+    font-size: 11.5px;
+    min-height: 38px;
+  }
+
+  .primary-action-btn {
+    padding: 10px 12px;
+    font-size: 13px;
+    min-height: 42px;
+  }
+
+  .secondary-action-btn {
+    padding: 10px 12px;
+    font-size: 12.5px;
+    min-height: 42px;
+  }
+
+  /* Student Guide Modal */
+  .modal-card {
+    width: calc(100vw - 20px);
+    max-height: 88vh;
+    border-radius: 16px;
+    margin: 10px;
+  }
+
+  .modal-header {
+    padding: 12px 16px;
+    font-size: 15px;
+  }
+
+  .modal-title {
+    font-size: 15px;
+  }
+
+  .modal-body {
+    padding: 14px;
+    gap: 12px;
+    font-size: 13px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .challenge-item {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 12px;
+  }
+
+  .challenge-btn {
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    font-size: 13px;
+  }
+}
+
+/* Small Phones (< 480px) */
+@media (max-width: 480px) {
+  .brand-text h1 {
+    font-size: 12.5px;
+  }
+
+  .brand-icon {
+    width: 28px;
+    height: 28px;
+    font-size: 15px;
+  }
+
+  .icon-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+
+  .module-btn {
+    font-size: 11px;
+    padding: 6px 2px;
+  }
+
+  .cam-text {
+    display: none;
+  }
+}
+
+/* Landscape Mode on Phones */
+@media (max-height: 500px) and (orientation: landscape) {
+  .app-header {
+    left: 8px;
+    right: 8px;
+    top: 6px;
+    gap: 4px;
+  }
+
+  .floating-panel {
+    position: fixed;
+    left: 8px;
+    top: 8px;
+    bottom: 8px;
+    width: 280px;
+    max-width: 80vw;
+    max-height: calc(100vh - 16px);
+    border-radius: 16px;
+    transform: translateX(0);
+  }
+
+  .floating-panel.collapsed {
+    transform: translateX(-310px) !important;
+  }
+
+  .sheet-drag-handle {
+    display: none;
+  }
+
+  .mobile-controls-fab {
+    left: 8px;
+    bottom: 8px;
+  }
+
+  .camera-bar {
+    bottom: 8px;
+  }
+
+  .hud-math-panel {
+    bottom: 8px;
+    right: 8px;
+    left: auto;
+    max-width: 260px;
+  }
 }

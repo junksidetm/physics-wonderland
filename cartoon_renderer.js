@@ -469,10 +469,19 @@ const CartoonRenderer = {
     if (avatarEl) avatarEl.textContent = avatarEmoji;
 
     if (bubbleEl) {
+      bubbleEl.classList.remove("hidden");
       bubbleEl.style.transform = "scale(0.95)";
       setTimeout(() => {
         bubbleEl.style.transform = "scale(1)";
       }, 100);
+
+      // Auto-dismiss on mobile after 8 seconds to keep 3D canvas clear
+      if (this._bubbleTimer) clearTimeout(this._bubbleTimer);
+      if (window.innerWidth <= 900) {
+        this._bubbleTimer = setTimeout(() => {
+          bubbleEl.classList.add("hidden");
+        }, 8000);
+      }
     }
   }
 };

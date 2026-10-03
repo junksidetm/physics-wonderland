@@ -2,7 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#090d16">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Physics Wonderland 3D | Interactive Physical Laws for Students</title>
   <link rel="stylesheet" href="style.css">
   
@@ -20,45 +24,59 @@
 
   <!-- App Header Bar -->
   <header class="app-header">
-    <div class="brand-badge">
-      <div class="brand-icon">⚛️</div>
-      <div class="brand-text">
-        <h1>Physics Wonderland 3D</h1>
-        <span>Interactive Laws & Motion</span>
+    <div class="header-top-row">
+      <div class="brand-badge">
+        <div class="brand-icon">⚛️</div>
+        <div class="brand-text">
+          <h1>Physics Wonderland 3D</h1>
+          <span class="brand-subtitle">Interactive Laws & Motion</span>
+        </div>
+      </div>
+
+      <!-- Header Actions -->
+      <div class="header-actions">
+        <button class="icon-btn mobile-only-btn" id="btn-toggle-panel" title="Simulation Controls" aria-label="Toggle Controls">🎛️</button>
+        <button class="icon-btn mobile-only-btn" id="btn-toggle-hud" title="Live Formula HUD" aria-label="Toggle Live Math Formula">📐</button>
+        <button class="icon-btn" id="btn-guide" title="Student Lesson & Quizzes">🎓</button>
+        <button class="icon-btn" id="btn-pause" title="Play / Pause Simulation">⏸</button>
+        <button class="icon-btn" id="btn-sound" title="Toggle Sound Effects">🔊</button>
       </div>
     </div>
 
     <!-- Main Module Switcher -->
-    <nav class="module-nav">
+    <nav class="module-nav" id="module-nav">
       <button class="module-btn active" data-module="gravity" onclick="app.switchModule('gravity')">
         <span class="icon">🪐</span>
-        <span>Universal Gravitation</span>
+        <span class="btn-text full-text">Universal Gravitation</span>
+        <span class="btn-text short-text">Gravity</span>
       </button>
       <button class="module-btn" data-module="bernoulli" onclick="app.switchModule('bernoulli')">
         <span class="icon">💨</span>
-        <span>Bernoulli's Theorem</span>
+        <span class="btn-text full-text">Bernoulli's Theorem</span>
+        <span class="btn-text short-text">Bernoulli</span>
       </button>
       <button class="module-btn" data-module="torricelli" onclick="app.switchModule('torricelli')">
         <span class="icon">💧</span>
-        <span>Torricelli's Law</span>
+        <span class="btn-text full-text">Torricelli's Law</span>
+        <span class="btn-text short-text">Torricelli</span>
       </button>
     </nav>
-
-    <!-- Header Actions -->
-    <div class="header-actions">
-      <button class="icon-btn" id="btn-guide" title="Student Lesson & Quizzes">🎓</button>
-      <button class="icon-btn" id="btn-pause" title="Play / Pause Simulation">⏸</button>
-      <button class="icon-btn" id="btn-sound" title="Toggle Sound Effects">🔊</button>
-    </div>
   </header>
 
-  <!-- Left Floating Interactive Control Panel -->
+  <!-- Mobile Backdrop for Control Panel -->
+  <div class="panel-backdrop" id="panel-backdrop"></div>
+
+  <!-- Left Floating Interactive Control Panel / Mobile Bottom Sheet -->
   <aside class="floating-panel" id="floating-panel">
+    <div class="sheet-drag-handle" id="sheet-drag-handle"></div>
     <div class="panel-header">
-      <div class="panel-title" id="panel-title-text">
-        <span style="font-size:18px">🪐</span> Gravitation & Orbit Lab
+      <div class="panel-title-wrapper">
+        <div class="panel-title" id="panel-title-text">
+          <span style="font-size:18px">🪐</span> Gravitation & Orbit Lab
+        </div>
+        <span class="badge-mode" id="panel-module-badge">Newtonian Mechanics</span>
       </div>
-      <span class="badge-mode" id="panel-module-badge">Newtonian Mechanics</span>
+      <button class="panel-close-btn" id="btn-close-panel" title="Close Panel" aria-label="Close Controls">✕</button>
     </div>
 
     <div class="panel-scroll-content" id="panel-controls">
@@ -66,11 +84,20 @@
     </div>
   </aside>
 
+  <!-- Mobile Floating Action Button to open controls when collapsed -->
+  <button class="mobile-controls-fab" id="mobile-controls-fab" aria-label="Open Simulation Controls">
+    <span class="fab-icon">🎛️</span>
+    <span class="fab-label">Controls</span>
+  </button>
+
   <!-- Live Mathematical Equation & Real-Time Arithmetic HUD -->
-  <div class="hud-math-panel">
-    <div class="hud-header">
-      <span>📐 Live Physics Formula</span>
-      <span style="color:#10b981">● LIVE</span>
+  <div class="hud-math-panel" id="hud-math-panel">
+    <div class="hud-header" id="hud-toggle-btn" role="button" tabindex="0" title="Click to collapse / expand">
+      <div class="hud-header-left">
+        <span>📐 Live Physics Formula</span>
+        <span class="hud-live-tag" style="color:#10b981">● LIVE</span>
+      </div>
+      <button class="hud-toggle-icon" id="hud-chevron" aria-label="Toggle Details">▼</button>
     </div>
     <div class="math-equation-box" id="hud-equation">
       F_g = G \frac{M \cdot m}{r^2}
@@ -83,19 +110,20 @@
   <!-- Camera Presets Floating Bar -->
   <div class="camera-bar">
     <button class="cam-btn active" data-cam="cinematic" onclick="app.setCameraPreset('cinematic')">
-      <span>🎥</span> 3D Angle
+      <span>🎥</span> <span class="cam-text">3D Angle</span>
     </button>
     <button class="cam-btn" data-cam="front" onclick="app.setCameraPreset('front')">
-      <span>📐</span> Profile View
+      <span>📐</span> <span class="cam-text">Profile View</span>
     </button>
     <button class="cam-btn" data-cam="top" onclick="app.setCameraPreset('top')">
-      <span>🛸</span> Top View
+      <span>🛸</span> <span class="cam-text">Top View</span>
     </button>
   </div>
 
   <!-- Cartoon Character Dialogue & Reaction Bubble -->
   <div class="character-box">
     <div class="speech-bubble" id="speech-bubble-box">
+      <button class="bubble-close-btn" id="bubble-close-btn" aria-label="Dismiss message">✕</button>
       <div class="bubble-speaker">
         <span>💬</span>
         <span id="bubble-speaker-name">Sir Isaac Newton</span>
@@ -105,7 +133,7 @@
       </div>
     </div>
 
-    <div class="cartoon-avatar-pill" onclick="window.soundSynth.playPop(); CartoonRenderer.showSpeechBubble('Cartoon Guide', 'Tip: You can drag with your mouse to rotate the 3D scene, and scroll to zoom in and out!', '💡');">
+    <div class="cartoon-avatar-pill" onclick="window.soundSynth.playPop(); CartoonRenderer.showSpeechBubble('Cartoon Guide', 'Tip: Drag to rotate the 3D scene, pinch or scroll to zoom!', '💡');">
       <div class="cartoon-avatar-icon" id="cartoon-avatar-icon">🍎</div>
       <div class="cartoon-avatar-info">
         <span class="cartoon-avatar-name">Lab Assistant</span>

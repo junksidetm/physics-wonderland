@@ -5,6 +5,7 @@ class App {
   constructor() {
     this.container = document.getElementById("canvas-container");
     this.activeModule = "gravity"; // 'gravity', 'bernoulli', 'torricelli'
+    this.currentCamPreset = "cinematic";
     this.currentSim = null;
 
     this.simSpeed = 1.0;
@@ -14,6 +15,7 @@ class App {
     this.initThree();
     this.initUI();
     this.switchModule("gravity");
+    this.checkResponsiveLayout();
     this.animate();
   }
 
@@ -69,12 +71,14 @@ class App {
 
   setupFallbackControls() {
     let isDragging = false;
-    let prevMouse = { x: 0, y: 0 };
+    let prevPointer = { x: 0, y: 0 };
+    let initialPinchDist = null;
     const el = this.renderer.domElement;
 
+    // Mouse handlers
     el.addEventListener("mousedown", e => {
       isDragging = true;
-      prevMouse = { x: e.clientX, y: e.clientY };
+      prevPointer = { x: e.clientX, y: e.clientY };
     });
 
     window.addEventListener("mouseup", () => {
@@ -83,9 +87,9 @@ class App {
 
     window.addEventListener("mousemove", e => {
       if (!isDragging) return;
-      const dx = e.clientX - prevMouse.x;
-      const dy = e.clientY - prevMouse.y;
-      prevMouse = { x: e.clientX, y: e.clientY };
+      const dx = e.clientX - prevPointer.x;
+      const dy = e.clientY - prevPointer.y;
+      prevPointer = { x: e.clientX, y: e.clientY };
 
       const spherical = new THREE.Spherical().setFromVector3(this.camera.position);
       spherical.theta -= dx * 0.005;
@@ -100,12 +104,61 @@ class App {
       const newDist = Math.max(3, Math.min(45, dist + e.deltaY * 0.02));
       this.camera.position.setLength(newDist);
     }, { passive: false });
+
+    // Touch handlers for mobile
+    el.addEventListener("touchstart", e => {
+      if (e.touches.length === 1) {
+        isDragging = true;
+        prevPointer = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      } else if (e.touches.length === 2) {
+        isDragging = false;
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        initialPinchDist = Math.hypot(dx, dy);
+      }
+    }, { passive: true });
+
+    el.addEventListener("touchmove", e => {
+      if (e.touches.length === 1 && isDragging) {
+        const dx = e.touches[0].clientX - prevPointer.x;
+        const dy = e.touches[0].clientY - prevPointer.y;
+        prevPointer = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+
+        const spherical = new THREE.Spherical().setFromVector3(this.camera.position);
+        spherical.theta -= dx * 0.007;
+        spherical.phi = Math.max(0.1, Math.min(Math.PI - 0.1, spherical.phi - dy * 0.007));
+        this.camera.position.setFromSpherical(spherical);
+        this.camera.lookAt(0, 0, 0);
+      } else if (e.touches.length === 2 && initialPinchDist) {
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        const dist = Math.hypot(dx, dy);
+        const pinchDelta = initialPinchDist - dist;
+        initialPinchDist = dist;
+
+        const camDist = this.camera.position.length();
+        const newDist = Math.max(3, Math.min(45, camDist + pinchDelta * 0.05));
+        this.camera.position.setLength(newDist);
+      }
+    }, { passive: true });
+
+    el.addEventListener("touchend", () => {
+      isDragging = false;
+      initialPinchDist = null;
+    }, { passive: true });
   }
 
   onWindowResize() {
     this.camera.aspect = window.innerWidth / window.innerHeight;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    this.checkResponsiveLayout();
+
+    if (this.currentCamPreset) {
+      this.setCameraPreset(this.currentCamPreset, false);
+    }
   }
 
   switchModule(moduleName) {
@@ -152,7 +205,8 @@ class App {
     this.showToast(`Switched to ${moduleName.toUpperCase()} Module`);
   }
 
-  setCameraPreset(type) {
+  setCameraPreset(type, animate = true) {
+    this.currentCamPreset = type;
     document.querySelectorAll(".cam-btn").forEach(b => {
       b.classList.toggle("active", b.dataset.cam === type);
     });
@@ -160,29 +214,40 @@ class App {
     const targetPos = new THREE.Vector3();
     const lookTarget = new THREE.Vector3(0, 0, 0);
 
+    const isPortrait = window.innerWidth < window.innerHeight;
+    const distScale = isPortrait ? 1.35 : 1.0;
+
     if (this.activeModule === "gravity") {
-      if (type === "cinematic") targetPos.set(0, 6, 14);
-      else if (type === "front") targetPos.set(0, 0, 16);
-      else if (type === "top") targetPos.set(0, 18, 0.1);
+      if (type === "cinematic") targetPos.set(0, 6 * distScale, 14 * distScale);
+      else if (type === "front") targetPos.set(0, 0, 16 * distScale);
+      else if (type === "top") targetPos.set(0, 18 * distScale, 0.1);
     } else if (this.activeModule === "bernoulli") {
-      if (type === "cinematic") targetPos.set(4, 5, 12);
-      else if (type === "front") targetPos.set(0, 1, 14);
-      else if (type === "top") targetPos.set(0, 14, 0.1);
+      if (type === "cinematic") targetPos.set(4, 5 * distScale, 12 * distScale);
+      else if (type === "front") targetPos.set(0, 1, 14 * distScale);
+      else if (type === "top") targetPos.set(0, 14 * distScale, 0.1);
     } else if (this.activeModule === "torricelli") {
       if (type === "cinematic") {
-        targetPos.set(5, 5, 12);
+        targetPos.set(5, 5 * distScale, 12 * distScale);
         lookTarget.set(4, 2, 0);
       } else if (type === "front") {
-        targetPos.set(5, 2.5, 14);
+        targetPos.set(5, 2.5, 14 * distScale);
         lookTarget.set(5, 2.5, 0);
       } else if (type === "top") {
-        targetPos.set(5, 15, 0.1);
+        targetPos.set(5, 15 * distScale, 0.1);
         lookTarget.set(5, 0, 0);
       }
     }
 
-    // Smooth transition
-    this.tweenCamera(targetPos, lookTarget);
+    // Transition
+    if (animate) {
+      this.tweenCamera(targetPos, lookTarget);
+    } else {
+      this.camera.position.copy(targetPos);
+      this.camera.lookAt(lookTarget);
+      if (this.controls) {
+        this.controls.target.copy(lookTarget);
+      }
+    }
   }
 
   tweenCamera(toPos, toTarget, duration = 600) {
@@ -557,6 +622,142 @@ class App {
         modalOverlay.classList.remove("active");
         window.soundSynth.playPop();
       });
+    }
+
+    // Mobile Panel Drawer handlers
+    const togglePanelBtn = document.getElementById("btn-toggle-panel");
+    const closePanelBtn = document.getElementById("btn-close-panel");
+    const mobileFab = document.getElementById("mobile-controls-fab");
+    const backdrop = document.getElementById("panel-backdrop");
+    const dragHandle = document.getElementById("sheet-drag-handle");
+
+    if (togglePanelBtn) togglePanelBtn.addEventListener("click", () => this.toggleControlPanel());
+    if (mobileFab) mobileFab.addEventListener("click", () => this.openControlPanel());
+    if (closePanelBtn) closePanelBtn.addEventListener("click", () => this.closeControlPanel());
+    if (backdrop) backdrop.addEventListener("click", () => this.closeControlPanel());
+    if (dragHandle) dragHandle.addEventListener("click", () => this.closeControlPanel());
+
+    // Live Math HUD toggle handlers
+    const toggleHudBtn = document.getElementById("btn-toggle-hud");
+    const hudToggleHeader = document.getElementById("hud-toggle-btn");
+    const hudPanel = document.getElementById("hud-math-panel");
+
+    if (toggleHudBtn && hudPanel) {
+      toggleHudBtn.addEventListener("click", () => {
+        hudPanel.classList.toggle("hidden");
+        toggleHudBtn.classList.toggle("active", !hudPanel.classList.contains("hidden"));
+        window.soundSynth.playPop();
+      });
+    }
+
+    if (hudToggleHeader && hudPanel) {
+      hudToggleHeader.addEventListener("click", () => {
+        hudPanel.classList.toggle("collapsed");
+        window.soundSynth.playPop();
+      });
+    }
+
+    // Speech bubble close handler
+    const bubbleClose = document.getElementById("bubble-close-btn");
+    const bubbleBox = document.getElementById("speech-bubble-box");
+    if (bubbleClose && bubbleBox) {
+      bubbleClose.addEventListener("click", (e) => {
+        e.stopPropagation();
+        bubbleBox.classList.add("hidden");
+        window.soundSynth.playPop();
+      });
+    }
+
+    // Prevent touch/pointer interactions on UI elements from interfering with 3D orbit
+    const uiElements = [
+      document.getElementById("floating-panel"),
+      document.querySelector(".camera-bar"),
+      document.getElementById("hud-math-panel"),
+      document.querySelector(".app-header"),
+      document.getElementById("mobile-controls-fab")
+    ];
+    uiElements.forEach(el => {
+      if (el) {
+        el.addEventListener("touchstart", e => e.stopPropagation(), { passive: true });
+        el.addEventListener("pointerdown", e => e.stopPropagation());
+      }
+    });
+
+    // Unlock Web Audio API on initial user touch/pointer interaction
+    const unlockAudio = () => {
+      if (window.soundSynth) window.soundSynth.init();
+      window.removeEventListener("pointerdown", unlockAudio);
+      window.removeEventListener("touchstart", unlockAudio);
+    };
+    window.addEventListener("pointerdown", unlockAudio, { once: true });
+    window.addEventListener("touchstart", unlockAudio, { once: true, passive: true });
+  }
+
+  toggleControlPanel() {
+    const panel = document.getElementById("floating-panel");
+    if (!panel) return;
+    if (panel.classList.contains("collapsed")) {
+      this.openControlPanel();
+    } else {
+      this.closeControlPanel();
+    }
+  }
+
+  openControlPanel() {
+    const panel = document.getElementById("floating-panel");
+    const backdrop = document.getElementById("panel-backdrop");
+    const fab = document.getElementById("mobile-controls-fab");
+    const toggleBtn = document.getElementById("btn-toggle-panel");
+
+    if (panel) {
+      panel.classList.remove("collapsed");
+      panel.classList.add("user-opened");
+    }
+    if (backdrop && window.innerWidth <= 900) backdrop.classList.add("active");
+    if (fab) fab.classList.add("hidden");
+    if (toggleBtn) toggleBtn.classList.add("active");
+    if (window.soundSynth) window.soundSynth.playPop();
+  }
+
+  closeControlPanel() {
+    const panel = document.getElementById("floating-panel");
+    const backdrop = document.getElementById("panel-backdrop");
+    const fab = document.getElementById("mobile-controls-fab");
+    const toggleBtn = document.getElementById("btn-toggle-panel");
+
+    if (panel) {
+      panel.classList.add("collapsed");
+      panel.classList.remove("user-opened");
+    }
+    if (backdrop) backdrop.classList.remove("active");
+    if (fab && window.innerWidth <= 900) fab.classList.remove("hidden");
+    if (toggleBtn) toggleBtn.classList.remove("active");
+    if (window.soundSynth) window.soundSynth.playPop();
+  }
+
+  checkResponsiveLayout() {
+    const isMobile = window.innerWidth <= 900;
+    const panel = document.getElementById("floating-panel");
+    const fab = document.getElementById("mobile-controls-fab");
+    const backdrop = document.getElementById("panel-backdrop");
+    const hud = document.getElementById("hud-math-panel");
+
+    if (isMobile) {
+      if (panel && !panel.classList.contains("user-opened")) {
+        panel.classList.add("collapsed");
+        if (fab) fab.classList.remove("hidden");
+      }
+      if (hud) {
+        hud.classList.add("collapsed");
+      }
+    } else {
+      if (panel) {
+        panel.classList.remove("collapsed");
+        panel.classList.remove("user-opened");
+      }
+      if (fab) fab.classList.add("hidden");
+      if (backdrop) backdrop.classList.remove("active");
+      if (hud) hud.classList.remove("collapsed");
     }
   }
 
