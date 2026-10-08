@@ -1,5 +1,8 @@
 # ⚛️ Physics Wonderland 3D
 
+[![GitHub Main](https://img.shields.io/badge/GitHub-Main-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/junksidetm/physics-wonderland)
+[![Codeberg Mirror](https://img.shields.io/badge/Codeberg-Mirror-2185d0?style=flat-square&logo=codeberg&logoColor=white)](https://codeberg.org/mrdarksidetm/physics-wonderland)
+[![GitLab Mirror](https://img.shields.io/badge/GitLab-Mirror-fc6d26?style=flat-square&logo=gitlab&logoColor=white)](https://gitlab.com/mrdarksidetm/physics-wonderland)
 [![Deploy to GitHub Pages](https://github.com/junksidetm/physics-wonderland/actions/workflows/deploy.yml/badge.svg)](https://github.com/junksidetm/physics-wonderland/actions/workflows/deploy.yml)
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-success?style=flat&logo=github)](https://junksidetm.github.io/physics-wonderland/)
 [![Platforms](https://img.shields.io/badge/Platform-Desktop%20%7C%20Mobile%20%7C%20Tablet-blue)](#-responsive-mobile--desktop-experience)
@@ -119,3 +122,13 @@ Then navigate to `http://localhost:8080` in your web browser.
 - **Audio:** Web Audio API (procedural synthesis, 0 audio assets required)
 - **Styling:** Modern Glassmorphism CSS with Material & Apple SF Pro aesthetics
 - **CI/CD Deployment:** GitHub Actions (`.github/workflows/deploy.yml`) to GitHub Pages
+
+---
+
+## 🌐 Source Mirrors
+
+- **Main (GitHub)**: [github.com/junksidetm/physics-wonderland](https://github.com/junksidetm/physics-wonderland)
+- **Mirror (Codeberg)**: [codeberg.org/mrdarksidetm/physics-wonderland](https://codeberg.org/mrdarksidetm/physics-wonderland)
+- **Mirror (GitLab)**: [gitlab.com/mrdarksidetm/physics-wonderland](https://gitlab.com/mrdarksidetm/physics-wonderland)
+- **Upstream Source**: [github.com/saltymother/physics-wonderland](https://github.com/saltymother/physics-wonderland)
+
