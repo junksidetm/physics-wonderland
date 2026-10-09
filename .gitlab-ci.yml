@@ -1,0 +1,16 @@
+image: alpine:latest
+
+stages:
+  - deploy
+
+pages:
+  stage: deploy
+  script:
+    - mkdir -p public
+    - cp -r index.html style.css *.js public/ 2>/dev/null || true
+    - cp -r .nojekyll public/ 2>/dev/null || true
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
