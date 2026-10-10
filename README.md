@@ -1,5 +1,8 @@
-# ⚛️ Physics Wonderland 3D
+<div align="center">
 
+<img src="assests\atom-symbol-svgrepo-com.svg" height="120">
+
+# Physics Wonderland 3D
 [![GitHub Main](https://img.shields.io/badge/GitHub-Main-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/junksidetm/physics-wonderland)
 [![Codeberg Mirror](https://img.shields.io/badge/Codeberg-Mirror-2185d0?style=flat-square&logo=codeberg&logoColor=white)](https://codeberg.org/mrdarksidetm/physics-wonderland)
 [![GitLab Mirror](https://img.shields.io/badge/GitLab-Mirror-fc6d26?style=flat-square&logo=gitlab&logoColor=white)](https://gitlab.com/mrdarksidetm/physics-wonderland)
@@ -7,9 +10,18 @@
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-success?style=flat&logo=github)](https://junksidetm.github.io/physics-wonderland/)
 [![Platforms](https://img.shields.io/badge/Platform-Desktop%20%7C%20Mobile%20%7C%20Tablet-blue)](#-responsive-mobile--desktop-experience)
 
+
+
 An interactive, animated 3D physics laboratory application built for modern browsers (desktop, mobile, and tablets) to teach students fundamental physical laws using vibrant motion, procedural 3D cartoon characters, and live mathematical calculations.
 
-🌐 **Live Web Application**: [https://junksidetm.github.io/physics-wonderland/](https://junksidetm.github.io/physics-wonderland/)
+  <a href="https://junksidetm.github.io/physics-wonderland/" target="_blank" rel="noopener noreferrer">
+    <img src="https://raw.githubusercontent.com/junksidetm/assests/2059cd31ecfc7cd57fab1d30a4baa11810783b48/Images/badges/SVG%20-%20Version/Website%20Badge.svg" alt="Visit the Physics Wonderland website" width="190">
+  </a><br>
+<sub><i>Click on the button above to learn Physics visually</i></sub>
+</div>
+
+---
+<div align="center"><sub>XXX</sub></div>
 
 ---
 
@@ -92,15 +104,10 @@ Physics Wonderland 3D is fully responsive across all screen sizes and orientatio
   - 📐 Front Profile / Cross-Section
   - 🛸 Top-Down View
 
----
+
 
 ## 🚀 Quick Launch & Local Development
 
-### Option 1: View Online (No Installation Needed)
-Visit the live GitHub Pages deployment directly:
-👉 **[https://junksidetm.github.io/physics-wonderland/](https://junksidetm.github.io/physics-wonderland/)**
-
-### Option 2: Run Locally
 Clone the repository and serve with any static web server:
 ```bash
 git clone https://github.com/junksidetm/physics-wonderland.git
@@ -114,7 +121,6 @@ python3 -m http.server 8080
 ```
 Then navigate to `http://localhost:8080` in your web browser.
 
----
 
 ## 🛠️ Technology Stack
 - **Rendering Engine:** [Three.js](https://threejs.org/) (r128 WebGL)
@@ -123,7 +129,6 @@ Then navigate to `http://localhost:8080` in your web browser.
 - **Styling:** Modern Glassmorphism CSS with Material & Apple SF Pro aesthetics
 - **CI/CD Deployment:** GitHub Actions (`.github/workflows/deploy.yml`) to GitHub Pages
 
----
 
 ## 🌐 Source Mirrors
 
@@ -132,3 +137,14 @@ Then navigate to `http://localhost:8080` in your web browser.
 - **Mirror (GitLab)**: [gitlab.com/mrdarksidetm/physics-wonderland](https://gitlab.com/mrdarksidetm/physics-wonderland)
 - **Upstream Source**: [github.com/saltymother/physics-wonderland](https://github.com/saltymother/physics-wonderland)
 
+---
+
+<div align="center">
+<a href="https://github.com/junksidetm/junksidetm.github.io">
+  <img src="https://raw.githubusercontent.com/junksidetm/assests/981a029b9f59b8ed581bbee9be318c86da52dcca/Images/Codium/Codium%20Banner/SVG/Codium%20-%20Banner%20Black.svg" width="360"></a>
+<br><br>
+<sub>
+<p>This repository is a part of `"Codeium"`. A part of Darkside Studio.
+</p>
+</sub>
+<p><b><sub>© 2026 Abhijeet Yadav.  All rights reserved. All logos are Copyright Law </sub></b></p>
