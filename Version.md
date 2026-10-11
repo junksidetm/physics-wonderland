@@ -105,3 +105,10 @@
   - `style.css`: Set `body` background to clean `#090d16`, removed `.sim-stage` rules, removed deep dive styles, disabled skyline halo, set skyline vector and banner filter to `none`, and styled footer with neutral clean highlights.
   - `Version.md`: Appended tracking entry.
 - **Status**: 100% (Completed)
+
+## [2026-10-11 19:18:00 IST] - Brand Link Anchor Target Fix
+- **Action**: Corrected footer brand logo anchor link from deprecated `#sim-stage` to `#top`.
+- **Files Modified**:
+  - `index.html`: Updated footer brand logo anchor link target.
+  - `Version.md`: Appended tracking entry.
+- **Status**: 100% (Completed)
