@@ -27,12 +27,23 @@
 }
 
 body {
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scroll-behavior: smooth;
   font-family: var(--font-family);
   background: radial-gradient(circle at 50% 20%, #1e1b4b 0%, #0f172a 60%, #030712 100%);
   color: var(--text-main);
+}
+
+/* Simulation Stage (Occupies full viewport 100dvh for immersive 3D runtime) */
+.sim-stage {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 100dvh;
+  overflow: hidden;
 }
 
 #canvas-container {
@@ -100,6 +111,16 @@ canvas {
   font-size: 20px;
   box-shadow: 0 0 15px rgba(245, 158, 11, 0.5);
   animation: pulse-slow 3s infinite ease-in-out;
+  overflow: hidden;
+}
+
+.brand-logo-img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
 }
 
 @keyframes pulse-slow {
@@ -486,15 +507,17 @@ canvas {
   color: #fff;
 }
 
-/* Formula & Live Calculation HUD (Bottom Left) */
+/* Formula & Live Calculation HUD (Top Right on Desktop) */
 .hud-math-panel {
   position: absolute;
-  bottom: 20px;
-  left: 20px;
+  top: 80px;
+  right: 20px;
   width: 340px;
+  max-height: min(360px, calc(100vh - 280px));
+  overflow-y: auto;
   background: var(--dark-glass);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-glass);
   box-shadow: var(--panel-shadow);
@@ -504,6 +527,7 @@ canvas {
   flex-direction: column;
   gap: 8px;
   pointer-events: auto;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease;
 }
 
 .hud-header {
@@ -515,17 +539,40 @@ canvas {
   color: var(--secondary);
   text-transform: uppercase;
   letter-spacing: 0.8px;
+  cursor: pointer;
 }
 
 .math-equation-box {
-  background: rgba(0, 0, 0, 0.35);
-  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.55);
+  padding: 10px 14px;
   border-radius: var(--radius-sm);
-  font-family: ui-monospace, Menlo, Monaco, monospace;
-  font-size: 13px;
+  font-family: "KaTeX_Math", ui-monospace, Menlo, Monaco, monospace;
+  font-size: 13.5px;
   color: #38bdf8;
   border-left: 3px solid #38bdf8;
   letter-spacing: 0.3px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  text-align: center;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.math-equation-box .katex-display {
+  margin: 0 !important;
+  text-align: center;
+}
+
+.math-equation-box .katex {
+  font-size: 1.12em;
+  color: #38bdf8;
+}
+
+.math-equation-box .katex {
+  font-size: 1.1em;
+  color: #e0f2fe;
 }
 
 .math-values-grid {
@@ -1122,15 +1169,16 @@ canvas {
     transform: scale(0.8);
   }
 
-  /* Live Math HUD */
+  /* Live Math HUD - Safely positioned at Top Right beneath header to avoid colliding with bottom docks */
   .hud-math-panel {
     position: fixed;
-    left: 12px;
+    top: calc(98px + env(safe-area-inset-top, 0px));
+    bottom: auto;
     right: 12px;
+    left: auto;
     width: auto;
-    max-width: min(380px, calc(100vw - 24px));
-    bottom: calc(52px + env(safe-area-inset-bottom, 0px));
-    margin: 0 auto;
+    max-width: min(300px, calc(100vw - 24px));
+    margin: 0;
     z-index: 25;
     padding: 8px 12px;
     border-radius: 16px;
@@ -1155,6 +1203,7 @@ canvas {
     padding: 4px 8px;
     font-size: 11px;
     margin-top: 4px;
+    min-height: 32px;
   }
 
   .hud-math-panel.collapsed .hud-toggle-icon {
@@ -1165,10 +1214,19 @@ canvas {
     display: none !important;
   }
 
+  /* Prevent any UI from overlapping behind or on top of opened control panel */
+  body.panel-open .hud-math-panel,
+  body.panel-open .character-box,
+  body.panel-open .stage-footer-dive {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: translateY(-8px);
+  }
+
   /* Camera Presets Bar */
   .camera-bar {
     position: fixed;
-    bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+    bottom: calc(8px + env(safe-area-inset-bottom, 0px));
     left: 50%;
     transform: translateX(-50%);
     z-index: 28;
@@ -1184,10 +1242,10 @@ canvas {
     gap: 3px;
   }
 
-  /* Character Box & Speech Bubble */
+  /* Character Box & Speech Bubble - Floats safely above HUD Math */
   .character-box {
     position: fixed;
-    bottom: calc(58px + env(safe-area-inset-bottom, 0px));
+    bottom: calc(125px + env(safe-area-inset-bottom, 0px));
     right: 12px;
     z-index: 26;
     align-items: flex-end;
@@ -1381,3 +1439,433 @@ canvas {
     max-width: 260px;
   }
 }
+
+/* ==========================================================================
+   Codeium 3D Isometric Skyline Vector
+   ========================================================================== */
+.codeium-skyline-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
+  background: #09061a;
+  padding-top: 40px;
+  padding-bottom: 0;
+  margin-bottom: 0;
+  z-index: 10;
+}
+
+.codeium-skyline-halo {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 1280px;
+  height: 200px;
+  background: radial-gradient(ellipse at bottom, rgba(147, 51, 234, 0.28), rgba(79, 70, 229, 0.12), transparent 70%);
+  border-radius: 50%;
+  filter: blur(48px);
+  pointer-events: none;
+}
+
+.codeium-skyline-img-box {
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.codeium-skyline-svg {
+  width: 100%;
+  min-height: 90px;
+  max-height: 260px;
+  object-fit: cover;
+  object-position: bottom;
+  display: block;
+  margin: 0;
+  pointer-events: none;
+  user-select: none;
+  filter: drop-shadow(0 -4px 35px rgba(168, 85, 247, 0.4));
+}
+
+@media (min-width: 640px) {
+  .codeium-skyline-svg {
+    object-fit: contain;
+  }
+}
+
+/* ==========================================================================
+   Codeium by Darkside Studio - Official Global Footer
+   ========================================================================== */
+.codeium-site-footer {
+  width: 100%;
+  border-top: 1px solid rgba(168, 85, 247, 0.18);
+  background: #070514;
+  padding: 60px 24px 36px 24px;
+  color: #94a3b8;
+  position: relative;
+  z-index: 10;
+  user-select: auto;
+  -webkit-user-select: auto;
+  box-sizing: border-box;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1.25fr;
+  gap: 36px;
+  padding-bottom: 44px;
+  border-bottom: 1px solid rgba(168, 85, 247, 0.15);
+}
+
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-brand-link {
+  display: inline-block;
+  margin-bottom: 6px;
+}
+
+.footer-banner-img {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+  filter: drop-shadow(0 2px 12px rgba(139, 92, 246, 0.3));
+  transition: transform 0.2s ease;
+}
+
+.footer-brand-link:hover .footer-banner-img {
+  transform: scale(1.02);
+}
+
+.footer-desc {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: #94a3b8;
+  max-width: 380px;
+  user-select: text;
+}
+
+.brand-studio {
+  color: #ffffff;
+}
+
+.footer-col-title {
+  font-size: 11px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #ffffff;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.col-icon {
+  font-size: 12px;
+}
+
+.footer-nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 13px;
+}
+
+.footer-nav-list a {
+  color: #94a3b8;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  user-select: text;
+}
+
+.footer-nav-list a:hover {
+  color: #d8b4fe;
+}
+
+/* Mirrors with SVG Logos */
+.mirrors-list .mirror-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #cbd5e1;
+}
+
+.mirror-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  fill: currentColor;
+  transition: transform 0.2s ease;
+}
+
+.codeberg-icon {
+  color: #2185D0;
+}
+
+.gitlab-icon {
+  color: #FC6D26;
+}
+
+.mirrors-list .mirror-link:hover .mirror-icon {
+  transform: scale(1.12);
+}
+
+/* Developer Profile Item */
+.developer-profile-item {
+  margin-top: 10px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(168, 85, 247, 0.15);
+}
+
+.developer-card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.developer-avatar-ring {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  padding: 2px;
+  border: 2px solid rgba(168, 85, 247, 0.6);
+  background: #1e1338;
+  overflow: hidden;
+  flex-shrink: 0;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.developer-card-link:hover .developer-avatar-ring {
+  transform: scale(1.08);
+  border-color: #c084fc;
+}
+
+.developer-avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+}
+
+.developer-text-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.developer-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  transition: color 0.2s ease;
+}
+
+.developer-card-link:hover .developer-title {
+  color: #d8b4fe;
+}
+
+.developer-handle {
+  font-size: 11px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  color: rgba(216, 180, 254, 0.8);
+}
+
+/* Bottom Copyright Row */
+.footer-bottom-row {
+  padding-top: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  color: #64748b;
+}
+
+.copyright-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.footer-studio-logo {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+
+.brand-highlight {
+  color: #cbd5e1;
+}
+
+/* Floating Back-to-Top Button */
+.back-to-top-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 99;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(147, 51, 234, 0.9);
+  color: #ffffff;
+  border: 1px solid rgba(216, 180, 254, 0.4);
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(88, 28, 135, 0.5);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.back-to-top-btn.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.back-to-top-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  background: #9333ea;
+}
+
+@media (max-width: 900px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .footer-desc {
+    max-width: 100%;
+  }
+}
+
+/* Stage to Footer Deep Dive Transition Pill (matching junksidetm.github.io) */
+.stage-footer-dive {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 15;
+  pointer-events: auto;
+  display: flex;
+  justify-content: center;
+}
+
+.deep-dive-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-decoration: none;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.deep-dive-btn:hover {
+  transform: translateY(-2px);
+}
+
+.deep-dive-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 20px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, rgba(88, 28, 135, 0.92) 0%, rgba(25, 19, 51, 0.96) 50%, rgba(88, 28, 135, 0.92) 100%);
+  border: 1.5px solid rgba(192, 132, 252, 0.45);
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.35);
+  color: #ffffff;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  transition: all 0.25s ease;
+}
+
+.deep-dive-btn:hover .deep-dive-pill {
+  border-color: rgba(216, 180, 254, 0.8);
+  box-shadow: 0 0 30px rgba(168, 85, 247, 0.6);
+}
+
+.deep-dive-arrow {
+  color: #d8b4fe;
+  animation: bounce-gentle 2s infinite ease-in-out;
+}
+
+@keyframes bounce-gentle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(3px); }
+}
+
+.deep-dive-sub {
+  font-size: 9.5px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  color: rgba(216, 180, 254, 0.8);
+  letter-spacing: 0.3px;
+}
+
+/* =========================================================================
+   Low-End PC Browser Performance Mode (Zero Canvas Readback & Fast Fillrate)
+========================================================================= */
+.low-end-perf *,
+.low-end-perf *::before,
+.low-end-perf *::after {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45) !important;
+}
+
+.low-end-perf .app-header,
+.low-end-perf .module-nav,
+.low-end-perf .brand-badge,
+.low-end-perf .floating-panel,
+.low-end-perf .hud-math-panel,
+.low-end-perf .camera-bar,
+.low-end-perf .icon-btn,
+.low-end-perf .cartoon-avatar-pill {
+  background: rgba(15, 23, 42, 0.96) !important;
+}
+
+.low-end-perf .speech-bubble {
+  background: #f8fafc !important;
+}
+
+@media (max-width: 900px) {
+  .stage-footer-dive {
+    display: none; /* Keep mobile viewport clean for controls */
+  }
+}
+
+

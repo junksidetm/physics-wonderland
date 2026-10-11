@@ -15,7 +15,7 @@
 An interactive, animated 3D physics laboratory application built for modern browsers (desktop, mobile, and tablets) to teach students fundamental physical laws using vibrant motion, procedural 3D cartoon characters, and live mathematical calculations.
 
   <a href="https://junksidetm.github.io/physics-wonderland/" target="_blank" rel="noopener noreferrer">
-    <img src="https://raw.githubusercontent.com/junksidetm/assests/2059cd31ecfc7cd57fab1d30a4baa11810783b48/Images/badges/SVG%20-%20Version/Website%20Badge.svg" alt="Visit the Physics Wonderland website" width="190">
+    <img src="https://raw.githubusercontent.com/junksidetm/assests/2059cd31ecfc7cd57fab1d30a4baa11810783b48/Images/badges/SVG%20-%20Version/Website%20Badge.svg" alt="Visit the Physics Wonderland website" width="300">
   </a><br>
 <sub><i>Click on the button above to learn Physics visually</i></sub>
 </div>
