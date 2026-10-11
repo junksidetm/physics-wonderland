@@ -1511,7 +1511,7 @@ canvas {
 
 .footer-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1.25fr;
+  grid-template-columns: 2fr 1fr 1fr;
   gap: 36px;
   padding-bottom: 44px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -1592,20 +1592,77 @@ canvas {
   color: #ffffff;
 }
 
-/* Mirrors with SVG Logos */
-.mirrors-list .mirror-link {
+/* ==========================================================================
+   Horizontal Mirrors & Studio Bar (Buttons Layout)
+   ========================================================================== */
+.footer-mirrors-bar {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 24px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.mirrors-brand-group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.mirrors-header-title {
+  font-size: 11px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #ffffff;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mirror-buttons-group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.mirror-btn {
+  display: inline-flex;
+  align-items: center;
   gap: 8px;
+  padding: 8px 14px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   color: #cbd5e1;
+  font-size: 12.5px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: text;
+}
+
+.mirror-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.mirror-btn:active {
+  transform: translateY(0);
 }
 
 .mirror-icon {
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
   flex-shrink: 0;
   fill: currentColor;
-  transition: transform 0.2s ease;
 }
 
 .codeberg-icon {
@@ -1616,31 +1673,40 @@ canvas {
   color: #FC6D26;
 }
 
-.mirrors-list .mirror-link:hover .mirror-icon {
-  transform: scale(1.12);
+.github-icon {
+  color: #ffffff;
 }
 
 /* Developer Profile Item */
 .developer-profile-item {
-  margin-top: 10px;
-  padding-top: 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
 }
 
 .developer-card-link {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   text-decoration: none;
   cursor: pointer;
+  padding: 4px 12px 4px 6px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.2s ease;
+}
+
+.developer-card-link:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .developer-avatar-ring {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  padding: 2px;
-  border: 2px solid rgba(255, 255, 255, 0.15);
+  padding: 1.5px;
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
   background: #141b2d;
   overflow: hidden;
   flex-shrink: 0;
@@ -1648,8 +1714,8 @@ canvas {
 }
 
 .developer-card-link:hover .developer-avatar-ring {
-  transform: scale(1.08);
-  border-color: rgba(255, 255, 255, 0.4);
+  transform: scale(1.05);
+  border-color: rgba(255, 255, 255, 0.45);
 }
 
 .developer-avatar-img {
@@ -1667,7 +1733,7 @@ canvas {
 }
 
 .developer-title {
-  font-size: 15px;
+  font-size: 13.5px;
   font-weight: 700;
   color: #ffffff;
   transition: color 0.2s ease;
@@ -1678,7 +1744,7 @@ canvas {
 }
 
 .developer-handle {
-  font-size: 11px;
+  font-size: 10.5px;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   color: #94a3b8;
 }
@@ -1754,6 +1820,20 @@ canvas {
   }
   .footer-desc {
     max-width: 100%;
+  }
+  .footer-mirrors-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .mirrors-brand-group {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .mirror-buttons-group {
+    flex-wrap: wrap;
+    gap: 8px;
   }
 }
 
