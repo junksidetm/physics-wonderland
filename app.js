@@ -615,6 +615,22 @@ class App {
     }
   }
 
+  formatFallback(formula) {
+    if (!formula) return "";
+    return formula
+      .replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g, "($1 / $2)")
+      .replace(/\\sqrt\{([^}]+)\}/g, "√($1)")
+      .replace(/\\cdot/g, "·")
+      .replace(/\\quad/g, "  ")
+      .replace(/\\rho/g, "ρ")
+      .replace(/\\Delta/g, "Δ")
+      .replace(/\\alpha/g, "α")
+      .replace(/\^2/g, "²")
+      .replace(/\^3/g, "³")
+      .replace(/_([0-9a-zA-Z]+)/g, "<sub>$1</sub>")
+      .replace(/\\/g, "");
+  }
+
   updateHUDMath(force = false) {
     if (!this.currentSim || !this.currentSim.getCalculations) return;
 
@@ -639,10 +655,10 @@ class App {
           });
           this.lastRenderedFormula = data.formula;
         } catch (e) {
-          eqBox.textContent = data.formula;
+          eqBox.innerHTML = this.formatFallback(data.formula);
         }
       } else {
-        eqBox.textContent = data.formula;
+        eqBox.innerHTML = this.formatFallback(data.formula);
       }
     }
 

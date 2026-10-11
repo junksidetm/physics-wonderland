@@ -12,7 +12,7 @@
   
   <!-- KaTeX for High-Fidelity Physics Formula LaTeX Rendering -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
 
   <!-- Three.js and OrbitControls from resilient CDN with fallbacks -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -20,6 +20,8 @@
 </head>
 <body>
 
+  <!-- Main 3D Simulation Stage (Full Viewport Edge-to-Edge) -->
+  <main class="sim-stage" id="sim-stage">
 
   <!-- 3D Canvas Background & Simulation Container -->
   <div id="canvas-container"></div>
@@ -106,8 +108,8 @@
       </div>
       <button class="hud-toggle-icon" id="hud-chevron" aria-label="Toggle Details">▼</button>
     </div>
-    <div class="math-equation-box" id="hud-equation">
-      F_g = G \frac{M \cdot m}{r^2}
+    <div class="math-equation-box" id="hud-equation" aria-live="polite">
+      F<sub>g</sub> = G &middot; (M &middot; m) / r<sup>2</sup>
     </div>
     <div class="math-values-grid" id="hud-values">
       <!-- Real-time dynamic variable readouts -->
@@ -163,6 +165,7 @@
       </div>
     </div>
   </div>
+  </main>
 
   <!-- =========================================================================
        Codeium 3D Isometric Skyline Vector (directly above footer boundary)

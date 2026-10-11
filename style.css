@@ -37,12 +37,22 @@ body {
   color: var(--text-main);
 }
 
+/* Main 3D Simulation Stage (Viewport Height Edge-to-Edge Container) */
+.sim-stage {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 100dvh;
+  overflow: hidden;
+  background: transparent;
+}
+
 #canvas-container {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   z-index: 1;
   touch-action: none;
 }
@@ -686,7 +696,7 @@ canvas {
 
 /* Student Guide & Quiz Modal */
 .modal-overlay {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -875,7 +885,7 @@ canvas {
 
 /* Notification Toast */
 .toast-msg {
-  position: absolute;
+  position: fixed;
   top: 80px;
   right: 24px;
   background: rgba(16, 185, 129, 0.95);
@@ -1131,7 +1141,7 @@ canvas {
   /* Mobile Controls Floating Pill Button */
   .mobile-controls-fab {
     display: flex;
-    position: fixed;
+    position: absolute;
     left: 12px;
     bottom: calc(58px + env(safe-area-inset-bottom, 0px));
     z-index: 30;
@@ -1162,7 +1172,7 @@ canvas {
 
   /* Live Math HUD - Safely positioned at Top Right beneath header to avoid colliding with bottom docks */
   .hud-math-panel {
-    position: fixed;
+    position: absolute;
     top: calc(98px + env(safe-area-inset-top, 0px));
     bottom: auto;
     right: 12px;
@@ -1215,7 +1225,7 @@ canvas {
 
   /* Camera Presets Bar */
   .camera-bar {
-    position: fixed;
+    position: absolute;
     bottom: calc(8px + env(safe-area-inset-bottom, 0px));
     left: 50%;
     transform: translateX(-50%);
@@ -1234,7 +1244,7 @@ canvas {
 
   /* Character Box & Speech Bubble - Floats safely above HUD Math */
   .character-box {
-    position: fixed;
+    position: absolute;
     bottom: calc(125px + env(safe-area-inset-bottom, 0px));
     right: 12px;
     z-index: 26;

@@ -120,3 +120,12 @@
   - `style.css`: Added styles for `.footer-mirrors-bar`, `.mirror-buttons-group`, and `.mirror-btn`, rebalanced `.footer-grid` to 3 clean sitemap columns, and added responsive mobile wrapping.
   - `Version.md`: Appended tracking entry.
 - **Status**: 100% (Completed)
+
+## [2026-10-11 19:42:00 IST] - Simulation Stage Viewport Containment, KaTeX Fallback & Footer Overlap Elimination
+- **Action**: Resolved the UI overlap bug where the Codeium footer collided with the 3D canvas and simulation controls by wrapping simulation elements in a dedicated 100vh (`100dvh`) `.sim-stage` container, loaded KaTeX synchronously with graceful Unicode math fallback formatting, and configured responsive absolute placement for mobile simulation controls to ensure zero collision with the footer.
+- **Files Modified**:
+  - `index.html`: Wrapped simulation elements in `<main class="sim-stage" id="sim-stage">`, removed `defer` from KaTeX script for instant availability, closed `</main>` before the skyline section, and provided clean semantic fallback markup for `#hud-equation`.
+  - `style.css`: Defined `.sim-stage` with `100vh`/`100dvh` dimensions, set `#canvas-container` to 100% stage height, changed `.modal-overlay` and `.toast-msg` to `position: fixed`, and configured mobile simulation controls (`.mobile-controls-fab`, `.hud-math-panel`, `.camera-bar`, `.character-box`) to use `position: absolute` within `.sim-stage` to prevent overlaying the footer on scroll.
+  - `app.js`: Added `formatFallback` helper method in `App` class to gracefully convert LaTeX syntax to clean Unicode mathematics if KaTeX is offline or loading, preventing raw unrendered LaTeX tokens from being displayed.
+  - `Version.md`: Appended tracking entry.
+- **Status**: 100% (Completed)
