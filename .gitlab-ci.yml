@@ -7,7 +7,7 @@ pages:
   stage: deploy
   script:
     - mkdir -p public
-    - cp -r index.html style.css *.js public/ 2>/dev/null || true
+    - cp -r index.html style.css *.js assests/ public/ 2>/dev/null || true
     - cp -r .nojekyll public/ 2>/dev/null || true
   artifacts:
     paths:

@@ -11,43 +11,6 @@ class App {
     this.simSpeed = 1.0;
     this.isPaused = false;
     this.lastTime = performance.now();
-    this.lastHUDUpdate = 0;
-    this.lastRenderedFormula = "";
-    this.lastGridHtml = "";
-
-    // Hardware-aware optimization flags for smooth 60fps on older PCs
-    let isLowGpu = false;
-    try {
-      const canvas = document.createElement("canvas");
-      const gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
-      if (gl) {
-        const debugInfo = gl.getExtension("WEBGL_debug_renderer_info");
-        if (debugInfo) {
-          const rendererStr = (gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) || "").toLowerCase();
-          if (
-            rendererStr.includes("swiftshader") ||
-            rendererStr.includes("llvmpipe") ||
-            rendererStr.includes("software") ||
-            rendererStr.includes("intel hd 3000") ||
-            rendererStr.includes("intel hd 4000") ||
-            rendererStr.includes("basic render driver")
-          ) {
-            isLowGpu = true;
-          }
-        }
-      }
-    } catch (e) {}
-
-    this.isLowEnd = Boolean(
-      (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) ||
-      (navigator.deviceMemory && navigator.deviceMemory <= 4) ||
-      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
-      isLowGpu
-    );
-
-    if (this.isLowEnd && typeof document !== "undefined") {
-      document.documentElement.classList.add("low-end-perf");
-    }
 
     this.initThree();
     this.initUI();
@@ -70,17 +33,12 @@ class App {
     );
     this.camera.position.set(0, 7, 16);
 
-    // 3. Renderer with hardware-aware budget (mediump + clamped pixel ratio on old GPUs)
-    this.renderer = new THREE.WebGLRenderer({
-      antialias: !this.isLowEnd,
-      alpha: true,
-      powerPreference: "high-performance",
-      precision: this.isLowEnd ? "mediump" : "highp"
-    });
+    // 3. Renderer
+    this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
-    this.renderer.setPixelRatio(this.isLowEnd ? 1.0 : Math.min(window.devicePixelRatio || 1, 1.75));
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = this.isLowEnd ? THREE.BasicShadowMap : THREE.PCFSoftShadowMap;
+    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.container.appendChild(this.renderer.domElement);
 
     // 4. Lighting (Studio + Vibrant Cartoon Light)
@@ -90,9 +48,6 @@ class App {
     const dirLight = new THREE.DirectionalLight(0xfffbeb, 1.2);
     dirLight.position.set(15, 25, 12);
     dirLight.castShadow = true;
-    dirLight.shadow.mapSize.width = this.isLowEnd ? 512 : 1024;
-    dirLight.shadow.mapSize.height = this.isLowEnd ? 512 : 1024;
-    dirLight.shadow.bias = -0.001;
     this.scene.add(dirLight);
 
     const rimLight = new THREE.DirectionalLight(0x38bdf8, 0.6);
@@ -197,7 +152,7 @@ class App {
     this.camera.aspect = window.innerWidth / window.innerHeight;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(window.innerWidth, window.innerHeight);
-    this.renderer.setPixelRatio(this.isLowEnd ? 1.0 : Math.min(window.devicePixelRatio || 1, 1.25));
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
     this.checkResponsiveLayout();
 
@@ -213,8 +168,6 @@ class App {
     }
 
     this.activeModule = moduleName;
-    this.lastRenderedFormula = "";
-    this.lastGridHtml = "";
 
     // Update active nav button
     document.querySelectorAll(".module-btn").forEach(btn => {
@@ -615,62 +568,18 @@ class App {
     }
   }
 
-  formatFallback(formula) {
-    if (!formula) return "";
-    return formula
-      .replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g, "($1 / $2)")
-      .replace(/\\sqrt\{([^}]+)\}/g, "√($1)")
-      .replace(/\\cdot/g, "·")
-      .replace(/\\quad/g, "  ")
-      .replace(/\\rho/g, "ρ")
-      .replace(/\\Delta/g, "Δ")
-      .replace(/\\alpha/g, "α")
-      .replace(/\^2/g, "²")
-      .replace(/\^3/g, "³")
-      .replace(/_([0-9a-zA-Z]+)/g, "<sub>$1</sub>")
-      .replace(/\\/g, "");
-  }
-
-  updateHUDMath(force = false) {
+  updateHUDMath() {
     if (!this.currentSim || !this.currentSim.getCalculations) return;
-
-    const now = performance.now();
-    // Throttle DOM updates to once every 100ms (10 updates/sec) unless forced
-    if (!force && now - this.lastHUDUpdate < 100) return;
-    this.lastHUDUpdate = now;
-
     const data = this.currentSim.getCalculations();
-    if (!data) return;
 
     const eqBox = document.getElementById("hud-equation");
     const gridBox = document.getElementById("hud-values");
 
-    // KaTeX Formula Rendering (Only render when formula text changes or forced)
-    if (eqBox && (force || data.formula !== this.lastRenderedFormula)) {
-      if (window.katex && typeof window.katex.render === "function") {
-        try {
-          window.katex.render(data.formula, eqBox, {
-            throwOnError: false,
-            displayMode: true
-          });
-          this.lastRenderedFormula = data.formula;
-        } catch (e) {
-          eqBox.innerHTML = this.formatFallback(data.formula);
-        }
-      } else {
-        eqBox.innerHTML = this.formatFallback(data.formula);
-      }
-    }
-
-    // Grid Values readout: update DOM only when content changes to prevent layout thrashing
-    if (gridBox && Array.isArray(data.values)) {
-      const newGridHtml = data.values
+    if (eqBox) eqBox.textContent = data.formula;
+    if (gridBox) {
+      gridBox.innerHTML = data.values
         .map(v => `<div class="math-val-item"><span>${v.label}</span><strong>${v.val}</strong></div>`)
         .join("");
-      if (newGridHtml !== this.lastGridHtml) {
-        gridBox.innerHTML = newGridHtml;
-        this.lastGridHtml = newGridHtml;
-      }
     }
   }
 
@@ -774,33 +683,6 @@ class App {
       }
     });
 
-    // Footer & Studio Navigation handlers
-    const footerBtn = document.getElementById("btn-footer");
-    if (footerBtn) {
-      footerBtn.addEventListener("click", () => {
-        const footer = document.getElementById("codeium-footer");
-        if (footer) {
-          footer.scrollIntoView({ behavior: "smooth" });
-          this.showToast("Codeium Ecosystem Footer");
-        }
-      });
-    }
-
-    const backToTopBtn = document.getElementById("btn-back-to-top");
-    if (backToTopBtn) {
-      backToTopBtn.addEventListener("click", () => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      });
-      window.addEventListener("scroll", () => {
-        backToTopBtn.classList.toggle("visible", window.scrollY > 300);
-      }, { passive: true });
-    }
-
-    // When deferred KaTeX script finishes loading, re-render formula instantly
-    window.addEventListener("load", () => {
-      this.updateHUDMath(true);
-    });
-
     // Unlock Web Audio API on initial user touch/pointer interaction
     const unlockAudio = () => {
       if (window.soundSynth) window.soundSynth.init();
@@ -831,7 +713,6 @@ class App {
       panel.classList.remove("collapsed");
       panel.classList.add("user-opened");
     }
-    document.body.classList.add("panel-open");
     if (backdrop && window.innerWidth <= 900) backdrop.classList.add("active");
     if (fab) fab.classList.add("hidden");
     if (toggleBtn) toggleBtn.classList.add("active");
@@ -848,7 +729,6 @@ class App {
       panel.classList.add("collapsed");
       panel.classList.remove("user-opened");
     }
-    document.body.classList.remove("panel-open");
     if (backdrop) backdrop.classList.remove("active");
     if (fab && window.innerWidth <= 900) fab.classList.remove("hidden");
     if (toggleBtn) toggleBtn.classList.remove("active");

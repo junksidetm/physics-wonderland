@@ -27,24 +27,12 @@
 }
 
 body {
-  width: 100%;
-  min-height: 100vh;
-  overflow-x: hidden;
-  overflow-y: auto;
-  scroll-behavior: smooth;
-  font-family: var(--font-family);
-  background: #090d16;
-  color: var(--text-main);
-}
-
-/* Main 3D Simulation Stage (Viewport Height Edge-to-Edge Container) */
-.sim-stage {
-  position: relative;
-  width: 100%;
+  width: 100vw;
   height: 100vh;
-  min-height: 100dvh;
   overflow: hidden;
-  background: transparent;
+  font-family: var(--font-family);
+  background: radial-gradient(circle at 50% 20%, #1e1b4b 0%, #0f172a 60%, #030712 100%);
+  color: var(--text-main);
 }
 
 #canvas-container {
@@ -104,24 +92,22 @@ canvas {
 .brand-icon {
   width: 36px;
   height: 36px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #f59e0b, #ec4899);
+  border-radius: 10px;
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
-  box-shadow: 0 0 15px rgba(245, 158, 11, 0.5);
+  box-shadow: 0 0 15px rgba(146, 102, 204, 0.45);
   animation: pulse-slow 3s infinite ease-in-out;
-  overflow: hidden;
 }
 
 .brand-logo-img {
-  width: 22px;
-  height: 22px;
+  width: 32px;
+  height: 32px;
+  border-radius: 7px;
   object-fit: contain;
-  pointer-events: none;
-  user-select: none;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+  object-position: center;
+  display: block;
 }
 
 @keyframes pulse-slow {
@@ -508,17 +494,15 @@ canvas {
   color: #fff;
 }
 
-/* Formula & Live Calculation HUD (Top Right on Desktop) */
+/* Formula & Live Calculation HUD (Bottom Left) */
 .hud-math-panel {
   position: absolute;
-  top: 80px;
-  right: 20px;
+  bottom: 20px;
+  left: 20px;
   width: 340px;
-  max-height: min(360px, calc(100vh - 280px));
-  overflow-y: auto;
   background: var(--dark-glass);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-glass);
   box-shadow: var(--panel-shadow);
@@ -528,7 +512,6 @@ canvas {
   flex-direction: column;
   gap: 8px;
   pointer-events: auto;
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease;
 }
 
 .hud-header {
@@ -540,40 +523,17 @@ canvas {
   color: var(--secondary);
   text-transform: uppercase;
   letter-spacing: 0.8px;
-  cursor: pointer;
 }
 
 .math-equation-box {
-  background: rgba(0, 0, 0, 0.55);
-  padding: 10px 14px;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 8px 12px;
   border-radius: var(--radius-sm);
-  font-family: "KaTeX_Math", ui-monospace, Menlo, Monaco, monospace;
-  font-size: 13.5px;
+  font-family: ui-monospace, Menlo, Monaco, monospace;
+  font-size: 13px;
   color: #38bdf8;
   border-left: 3px solid #38bdf8;
   letter-spacing: 0.3px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  text-align: center;
-  min-height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.math-equation-box .katex-display {
-  margin: 0 !important;
-  text-align: center;
-}
-
-.math-equation-box .katex {
-  font-size: 1.12em;
-  color: #38bdf8;
-}
-
-.math-equation-box .katex {
-  font-size: 1.1em;
-  color: #e0f2fe;
 }
 
 .math-values-grid {
@@ -696,7 +656,7 @@ canvas {
 
 /* Student Guide & Quiz Modal */
 .modal-overlay {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
@@ -885,7 +845,7 @@ canvas {
 
 /* Notification Toast */
 .toast-msg {
-  position: fixed;
+  position: absolute;
   top: 80px;
   right: 24px;
   background: rgba(16, 185, 129, 0.95);
@@ -988,7 +948,14 @@ canvas {
   .brand-icon {
     width: 32px;
     height: 32px;
-    font-size: 16px;
+    border-radius: 8px;
+    box-shadow: 0 0 12px rgba(146, 102, 204, 0.4);
+  }
+
+  .brand-logo-img {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
   }
 
   .brand-text h1 {
@@ -1141,7 +1108,7 @@ canvas {
   /* Mobile Controls Floating Pill Button */
   .mobile-controls-fab {
     display: flex;
-    position: absolute;
+    position: fixed;
     left: 12px;
     bottom: calc(58px + env(safe-area-inset-bottom, 0px));
     z-index: 30;
@@ -1170,16 +1137,15 @@ canvas {
     transform: scale(0.8);
   }
 
-  /* Live Math HUD - Safely positioned at Top Right beneath header to avoid colliding with bottom docks */
+  /* Live Math HUD */
   .hud-math-panel {
-    position: absolute;
-    top: calc(98px + env(safe-area-inset-top, 0px));
-    bottom: auto;
+    position: fixed;
+    left: 12px;
     right: 12px;
-    left: auto;
     width: auto;
-    max-width: min(300px, calc(100vw - 24px));
-    margin: 0;
+    max-width: min(380px, calc(100vw - 24px));
+    bottom: calc(52px + env(safe-area-inset-bottom, 0px));
+    margin: 0 auto;
     z-index: 25;
     padding: 8px 12px;
     border-radius: 16px;
@@ -1204,7 +1170,6 @@ canvas {
     padding: 4px 8px;
     font-size: 11px;
     margin-top: 4px;
-    min-height: 32px;
   }
 
   .hud-math-panel.collapsed .hud-toggle-icon {
@@ -1215,18 +1180,10 @@ canvas {
     display: none !important;
   }
 
-  /* Prevent any UI from overlapping behind or on top of opened control panel */
-  body.panel-open .hud-math-panel,
-  body.panel-open .character-box {
-    opacity: 0 !important;
-    pointer-events: none !important;
-    transform: translateY(-8px);
-  }
-
   /* Camera Presets Bar */
   .camera-bar {
-    position: absolute;
-    bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+    position: fixed;
+    bottom: calc(10px + env(safe-area-inset-bottom, 0px));
     left: 50%;
     transform: translateX(-50%);
     z-index: 28;
@@ -1242,10 +1199,10 @@ canvas {
     gap: 3px;
   }
 
-  /* Character Box & Speech Bubble - Floats safely above HUD Math */
+  /* Character Box & Speech Bubble */
   .character-box {
-    position: absolute;
-    bottom: calc(125px + env(safe-area-inset-bottom, 0px));
+    position: fixed;
+    bottom: calc(58px + env(safe-area-inset-bottom, 0px));
     right: 12px;
     z-index: 26;
     align-items: flex-end;
@@ -1375,7 +1332,14 @@ canvas {
   .brand-icon {
     width: 28px;
     height: 28px;
-    font-size: 15px;
+    border-radius: 7px;
+    box-shadow: 0 0 10px rgba(146, 102, 204, 0.35);
+  }
+
+  .brand-logo-img {
+    width: 24px;
+    height: 24px;
+    border-radius: 5px;
   }
 
   .icon-btn {
@@ -1439,438 +1403,3 @@ canvas {
     max-width: 260px;
   }
 }
-
-/* ==========================================================================
-   Codeium 3D Isometric Skyline Vector
-   ========================================================================== */
-.codeium-skyline-wrapper {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-  user-select: none;
-  -webkit-user-select: none;
-  pointer-events: none;
-  background: transparent;
-  padding-top: 40px;
-  padding-bottom: 0;
-  margin-bottom: 0;
-  z-index: 10;
-}
-
-.codeium-skyline-halo {
-  display: none;
-}
-
-.codeium-skyline-img-box {
-  width: 100%;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-}
-
-.codeium-skyline-svg {
-  width: 100%;
-  min-height: 90px;
-  max-height: 260px;
-  object-fit: cover;
-  object-position: bottom;
-  display: block;
-  margin: 0;
-  pointer-events: none;
-  user-select: none;
-  filter: none;
-}
-
-@media (min-width: 640px) {
-  .codeium-skyline-svg {
-    object-fit: contain;
-  }
-}
-
-/* ==========================================================================
-   Codeium by Darkside Studio - Official Global Footer
-   ========================================================================== */
-.codeium-site-footer {
-  width: 100%;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  background: #090d16;
-  padding: 64px 24px 36px 24px;
-  color: #94a3b8;
-  position: relative;
-  z-index: 10;
-  user-select: auto;
-  -webkit-user-select: auto;
-  box-sizing: border-box;
-}
-
-@media (min-width: 1024px) {
-  .codeium-site-footer {
-    padding-left: 48px;
-    padding-right: 48px;
-  }
-}
-
-.footer-container {
-  max-width: 80rem; /* 1280px, matching max-w-7xl of junksidetm.github.io */
-  width: 100%;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-}
-
-.footer-grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  gap: 36px;
-  padding-bottom: 44px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.footer-col {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.footer-brand-link {
-  display: inline-block;
-  margin-bottom: 6px;
-}
-
-.footer-banner-img {
-  height: 40px;
-  width: auto;
-  object-fit: contain;
-  pointer-events: none;
-  user-select: none;
-  filter: none;
-  transition: transform 0.2s ease;
-}
-
-.footer-brand-link:hover .footer-banner-img {
-  transform: scale(1.02);
-}
-
-.footer-desc {
-  font-size: 13.5px;
-  line-height: 1.6;
-  color: #94a3b8;
-  max-width: 380px;
-  user-select: text;
-}
-
-.brand-studio {
-  color: #ffffff;
-}
-
-.footer-col-title {
-  font-size: 11px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: #ffffff;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 8px;
-}
-
-.col-icon {
-  font-size: 12px;
-}
-
-.footer-nav-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  font-size: 13px;
-}
-
-.footer-nav-list a {
-  color: #94a3b8;
-  text-decoration: none;
-  transition: color 0.2s ease;
-  user-select: text;
-}
-
-.footer-nav-list a:hover {
-  color: #ffffff;
-}
-
-/* ==========================================================================
-   Horizontal Mirrors & Studio Bar (Buttons Layout)
-   ========================================================================== */
-.footer-mirrors-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 16px;
-  padding: 24px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.mirrors-brand-group {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-
-.mirrors-header-title {
-  font-size: 11px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: #ffffff;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.mirror-buttons-group {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.mirror-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 14px;
-  border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #cbd5e1;
-  font-size: 12.5px;
-  font-weight: 500;
-  text-decoration: none;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  user-select: text;
-}
-
-.mirror-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.25);
-  color: #ffffff;
-  transform: translateY(-1px);
-}
-
-.mirror-btn:active {
-  transform: translateY(0);
-}
-
-.mirror-icon {
-  width: 15px;
-  height: 15px;
-  flex-shrink: 0;
-  fill: currentColor;
-}
-
-.codeberg-icon {
-  color: #2185D0;
-}
-
-.gitlab-icon {
-  color: #FC6D26;
-}
-
-.github-icon {
-  color: #ffffff;
-}
-
-/* Developer Profile Item */
-.developer-profile-item {
-  display: flex;
-  align-items: center;
-}
-
-.developer-card-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-  cursor: pointer;
-  padding: 4px 12px 4px 6px;
-  border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  transition: all 0.2s ease;
-}
-
-.developer-card-link:hover {
-  background: rgba(255, 255, 255, 0.07);
-  border-color: rgba(255, 255, 255, 0.2);
-}
-
-.developer-avatar-ring {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  padding: 1.5px;
-  border: 1.5px solid rgba(255, 255, 255, 0.2);
-  background: #141b2d;
-  overflow: hidden;
-  flex-shrink: 0;
-  transition: transform 0.2s ease, border-color 0.2s ease;
-}
-
-.developer-card-link:hover .developer-avatar-ring {
-  transform: scale(1.05);
-  border-color: rgba(255, 255, 255, 0.45);
-}
-
-.developer-avatar-img {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  object-fit: cover;
-  pointer-events: none;
-  user-select: none;
-}
-
-.developer-text-box {
-  display: flex;
-  flex-direction: column;
-}
-
-.developer-title {
-  font-size: 13.5px;
-  font-weight: 700;
-  color: #ffffff;
-  transition: color 0.2s ease;
-}
-
-.developer-card-link:hover .developer-title {
-  color: #ffffff;
-}
-
-.developer-handle {
-  font-size: 10.5px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  color: #94a3b8;
-}
-
-/* Bottom Copyright Row */
-.footer-bottom-row {
-  padding-top: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 12px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  color: #64748b;
-}
-
-.copyright-content {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.footer-studio-logo {
-  width: 22px;
-  height: 22px;
-  object-fit: contain;
-  pointer-events: none;
-  user-select: none;
-}
-
-.brand-highlight {
-  color: #cbd5e1;
-}
-
-/* Floating Back-to-Top Button */
-.back-to-top-btn {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 99;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: rgba(30, 41, 59, 0.9);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  font-size: 18px;
-  font-weight: 700;
-  cursor: pointer;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(8px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.25s ease, opacity 0.25s ease;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.back-to-top-btn.visible {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.back-to-top-btn:hover {
-  transform: translateY(-3px) scale(1.05);
-  background: #334155;
-}
-
-@media (max-width: 900px) {
-  .footer-grid {
-    grid-template-columns: 1fr;
-    gap: 28px;
-  }
-  .footer-desc {
-    max-width: 100%;
-  }
-  .footer-mirrors-bar {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-  }
-  .mirrors-brand-group {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-  .mirror-buttons-group {
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-}
-
-/* =========================================================================
-   Low-End PC Browser Performance Mode (Zero Canvas Readback & Fast Fillrate)
-========================================================================= */
-.low-end-perf *,
-.low-end-perf *::before,
-.low-end-perf *::after {
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45) !important;
-}
-
-.low-end-perf .app-header,
-.low-end-perf .module-nav,
-.low-end-perf .brand-badge,
-.low-end-perf .floating-panel,
-.low-end-perf .hud-math-panel,
-.low-end-perf .camera-bar,
-.low-end-perf .icon-btn,
-.low-end-perf .cartoon-avatar-pill {
-  background: rgba(15, 23, 42, 0.96) !important;
-}
-
-.low-end-perf .speech-bubble {
-  background: #f8fafc !important;
-}
-
-

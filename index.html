@@ -8,20 +8,14 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Physics Wonderland | Interactive Physical Laws for Students</title>
+  <link rel="icon" type="image/svg+xml" href="assests/atom-symbol-svgrepo-com.svg">
   <link rel="stylesheet" href="style.css">
   
-  <!-- KaTeX for High-Fidelity Physics Formula LaTeX Rendering -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-
   <!-- Three.js and OrbitControls from resilient CDN with fallbacks -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body>
-
-  <!-- Main 3D Simulation Stage (Full Viewport Edge-to-Edge) -->
-  <main class="sim-stage" id="sim-stage">
 
   <!-- 3D Canvas Background & Simulation Container -->
   <div id="canvas-container"></div>
@@ -48,7 +42,6 @@
         <button class="icon-btn" id="btn-guide" title="Student Lesson & Quizzes">🎓</button>
         <button class="icon-btn" id="btn-pause" title="Play / Pause Simulation">⏸</button>
         <button class="icon-btn" id="btn-sound" title="Toggle Sound Effects">🔊</button>
-        <button class="icon-btn" id="btn-footer" title="Codeium & Darkside Studio Footer" aria-label="View Footer">🏛️</button>
       </div>
     </div>
 
@@ -108,8 +101,8 @@
       </div>
       <button class="hud-toggle-icon" id="hud-chevron" aria-label="Toggle Details">▼</button>
     </div>
-    <div class="math-equation-box" id="hud-equation" aria-live="polite">
-      F<sub>g</sub> = G &middot; (M &middot; m) / r<sup>2</sup>
+    <div class="math-equation-box" id="hud-equation">
+      F_g = G \frac{M \cdot m}{r^2}
     </div>
     <div class="math-values-grid" id="hud-values">
       <!-- Real-time dynamic variable readouts -->
@@ -165,185 +158,8 @@
       </div>
     </div>
   </div>
-  </main>
 
-  <!-- =========================================================================
-       Codeium 3D Isometric Skyline Vector (directly above footer boundary)
-  ========================================================================= -->
-  <section class="codeium-skyline-wrapper" id="codeium-skyline" aria-hidden="true">
-    <div class="codeium-skyline-img-box">
-      <img
-        src="https://junksidetm.github.io/Codeium%20-%20Footer%20SVG.svg"
-        alt=""
-        class="codeium-skyline-svg"
-        draggable="false"
-      />
-    </div>
-  </section>
-
-  <!-- =========================================================================
-       Codeium by Darkside Studio - Official Global Footer
-  ========================================================================= -->
-  <footer class="codeium-site-footer" id="codeium-footer">
-    <div class="footer-container">
-      <div class="footer-grid">
-        <!-- Brand Presentation & Banner -->
-        <div class="footer-col brand-col">
-          <a href="#top" class="footer-brand-link" aria-label="Codeium by Darkside Studio">
-            <img
-              src="https://junksidetm.github.io/codeium-banner.svg"
-              alt="Codeium Banner"
-              class="footer-banner-img"
-              draggable="false"
-            />
-          </a>
-          <p class="footer-desc">
-            &quot;Codeium&quot; is the specialized software brand of <strong class="brand-studio">Darkside Studio</strong>.
-            Engineering high-craft native Android solutions, cross-platform Flutter suites,
-            WebAssembly modules, and precision automation toolchains.
-          </p>
-        </div>
-
-        <!-- Sitemap Column 1: Applications -->
-        <div class="footer-col">
-          <h4 class="footer-col-title">
-            <span class="col-icon">⚙️</span>
-            <span>Applications</span>
-          </h4>
-          <ul class="footer-nav-list">
-            <li>
-              <a href="https://github.com/junksidetm/Wallet-Flutter" target="_blank" rel="noopener noreferrer">
-                Wallet-Flutter (M3)
-              </a>
-            </li>
-            <li>
-              <a href="https://github.com/junksidetm/Google-Emoji-3D" target="_blank" rel="noopener noreferrer">
-                Google Emoji 3D
-              </a>
-            </li>
-            <li>
-              <a href="https://github.com/junksidetm/physics-wonderland" target="_blank" rel="noopener noreferrer">
-                Physics Wonderland
-              </a>
-            </li>
-            <li>
-              <a href="https://github.com/junksidetm/instafel" target="_blank" rel="noopener noreferrer">
-                Instafel (Unclone)
-              </a>
-            </li>
-            <li>
-              <a href="https://github.com/junksidetm/Android-Battery-Unrestricted-Checker" target="_blank" rel="noopener noreferrer">
-                Battery Checker
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        <!-- Sitemap Column 2: Toolchains -->
-        <div class="footer-col">
-          <h4 class="footer-col-title">
-            <span class="col-icon">⚡</span>
-            <span>Toolchains</span>
-          </h4>
-          <ul class="footer-nav-list">
-            <li>
-              <a href="https://github.com/junksidetm/Brave-Origin-Profile-Windows" target="_blank" rel="noopener noreferrer">
-                Brave Profile (Windows)
-              </a>
-            </li>
-            <li>
-              <a href="https://github.com/junksidetm/Brave-Origin-Profile-MacOS" target="_blank" rel="noopener noreferrer">
-                Brave Profile (macOS)
-              </a>
-            </li>
-            <li>
-              <a href="https://github.com/junksidetm/vector-drawable-nextjs" target="_blank" rel="noopener noreferrer">
-                Vector Drawable Next.js
-              </a>
-            </li>
-            <li>
-              <a href="https://github.com/junksidetm/WinForge" target="_blank" rel="noopener noreferrer">
-                WinForge Power Tools
-              </a>
-            </li>
-            <li>
-              <a href="https://github.com/junksidetm/Wasm" target="_blank" rel="noopener noreferrer">
-                Wasm High-Speed Engine
-              </a>
-            </li>
-            <li>
-              <a href="https://github.com/junksidetm/Gboard-patches" target="_blank" rel="noopener noreferrer">
-                Gboard Patches (Morphe)
-              </a>
-            </li>
-          </ul>
-        </div>
-
-      </div>
-
-      <!-- Horizontal Mirrors & Studio Bar -->
-      <div class="footer-mirrors-bar">
-        <div class="mirrors-brand-group">
-          <span class="mirrors-header-title">
-            <span class="col-icon">🛡️</span>
-            <span>Mirrors &amp; Studio</span>
-          </span>
-          <div class="mirror-buttons-group">
-            <a href="https://github.com/junksidetm/" target="_blank" rel="noopener noreferrer" class="mirror-btn github-btn" title="GitHub Main Repository">
-              <svg class="mirror-icon github-icon" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-              </svg>
-              <span>GitHub Main (@junksidetm)</span>
-            </a>
-            <a href="https://codeberg.org/mrdarksidetm" target="_blank" rel="noopener noreferrer" class="mirror-btn codeberg-btn" title="Codeberg Mirror">
-              <svg class="mirror-icon codeberg-icon" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 1.5a10.5 10.5 0 0 0-10.5 10.5 10.5 0 0 0 .37 2.76l7.85-4.1a3.5 3.5 0 0 1 4.56 0l7.85 4.1a10.5 10.5 0 0 0 .37-2.76A10.5 10.5 0 0 0 12 1.5zm-5.78 12.3l-3.3 1.72a10.5 10.5 0 0 0 18.16 0l-3.3-1.72-4.14 2.16a3.5 3.5 0 0 1-3.28 0l-4.14-2.16z"/>
-              </svg>
-              <span>Codeberg Mirror (@mrdarksidetm)</span>
-            </a>
-            <a href="https://gitlab.com/mrdarksidetm" target="_blank" rel="noopener noreferrer" class="mirror-btn gitlab-btn" title="GitLab Mirror">
-              <svg class="mirror-icon gitlab-icon" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M22.65 14.39L12 22.13 1.35 14.39a.84.84 0 0 1-.3-.94l1.22-3.78 2.44-7.51A.42.42 0 0 1 5.48 2h.06a.43.43 0 0 1 .4.28L8.3 9.42h7.4l2.36-7.14a.43.43 0 0 1 .4-.28h.06a.42.42 0 0 1 .37.16l2.44 7.51 1.22 3.78a.84.84 0 0 1-.3.94z"/>
-              </svg>
-              <span>GitLab Mirror (@mrdarksidetm)</span>
-            </a>
-          </div>
-        </div>
-
-        <div class="developer-profile-item">
-          <a href="https://github.com/junksidetm/" target="_blank" rel="noopener noreferrer" class="developer-card-link" aria-label="Developer Profile on GitHub">
-            <div class="developer-avatar-ring">
-              <img src="https://junksidetm.github.io/developer.png" alt="Developer" class="developer-avatar-img" draggable="false" />
-            </div>
-            <div class="developer-text-box">
-              <span class="developer-title">Developer ↗</span>
-              <span class="developer-handle">@junksidetm</span>
-            </div>
-          </a>
-        </div>
-      </div>
-
-      <!-- Bottom Copyright Row with Darkside Studio Logo -->
-      <div class="footer-bottom-row">
-        <div class="copyright-content">
-          <img
-            src="https://junksidetm.github.io/darkside-studio-logo-black.png"
-            alt="Darkside Studio Logo"
-            class="footer-studio-logo"
-            draggable="false"
-          />
-          <p>
-            &copy; 2026 Abhijeet Yadav. <strong class="brand-highlight">&quot;Codeium&quot;</strong> is a part of Darkside Studio. All rights reserved.
-          </p>
-        </div>
-      </div>
-    </div>
-  </footer>
-
-  <!-- Floating Back-to-Top Button -->
-  <button class="back-to-top-btn" id="btn-back-to-top" title="Back to Simulation" aria-label="Back to Top">
-    ↑
-  </button>
+  <!-- Scripts -->
   <script src="sound_effects.js"></script>
   <script src="cartoon_renderer.js"></script>
   <script src="physics_gravity.js"></script>
