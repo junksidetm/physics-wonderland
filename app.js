@@ -770,23 +770,10 @@ class App {
       });
     }
 
-    const diveBtn = document.getElementById("btn-deep-dive");
-    if (diveBtn) {
-      diveBtn.addEventListener("click", () => {
-        const footer = document.getElementById("codeium-footer");
-        if (footer) {
-          footer.scrollIntoView({ behavior: "smooth" });
-        }
-      });
-    }
-
     const backToTopBtn = document.getElementById("btn-back-to-top");
     if (backToTopBtn) {
       backToTopBtn.addEventListener("click", () => {
-        const stage = document.getElementById("sim-stage");
-        if (stage) {
-          stage.scrollIntoView({ behavior: "smooth" });
-        }
+        window.scrollTo({ top: 0, behavior: "smooth" });
       });
       window.addEventListener("scroll", () => {
         backToTopBtn.classList.toggle("visible", window.scrollY > 300);

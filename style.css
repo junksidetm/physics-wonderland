@@ -33,17 +33,8 @@ body {
   overflow-y: auto;
   scroll-behavior: smooth;
   font-family: var(--font-family);
-  background: radial-gradient(circle at 50% 20%, #1e1b4b 0%, #0f172a 60%, #030712 100%);
+  background: #090d16;
   color: var(--text-main);
-}
-
-/* Simulation Stage (Occupies full viewport 100dvh for immersive 3D runtime) */
-.sim-stage {
-  position: relative;
-  width: 100%;
-  height: 100vh;
-  min-height: 100dvh;
-  overflow: hidden;
 }
 
 #canvas-container {
@@ -51,7 +42,7 @@ body {
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   z-index: 1;
   touch-action: none;
 }
@@ -1216,8 +1207,7 @@ canvas {
 
   /* Prevent any UI from overlapping behind or on top of opened control panel */
   body.panel-open .hud-math-panel,
-  body.panel-open .character-box,
-  body.panel-open .stage-footer-dive {
+  body.panel-open .character-box {
     opacity: 0 !important;
     pointer-events: none !important;
     transform: translateY(-8px);
@@ -1450,7 +1440,7 @@ canvas {
   user-select: none;
   -webkit-user-select: none;
   pointer-events: none;
-  background: #09061a;
+  background: transparent;
   padding-top: 40px;
   padding-bottom: 0;
   margin-bottom: 0;
@@ -1458,17 +1448,7 @@ canvas {
 }
 
 .codeium-skyline-halo {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  max-width: 1280px;
-  height: 200px;
-  background: radial-gradient(ellipse at bottom, rgba(147, 51, 234, 0.28), rgba(79, 70, 229, 0.12), transparent 70%);
-  border-radius: 50%;
-  filter: blur(48px);
-  pointer-events: none;
+  display: none;
 }
 
 .codeium-skyline-img-box {
@@ -1488,7 +1468,7 @@ canvas {
   margin: 0;
   pointer-events: none;
   user-select: none;
-  filter: drop-shadow(0 -4px 35px rgba(168, 85, 247, 0.4));
+  filter: none;
 }
 
 @media (min-width: 640px) {
@@ -1502,8 +1482,8 @@ canvas {
    ========================================================================== */
 .codeium-site-footer {
   width: 100%;
-  border-top: 1px solid rgba(168, 85, 247, 0.18);
-  background: #070514;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: #090d16;
   padding: 64px 24px 36px 24px;
   color: #94a3b8;
   position: relative;
@@ -1534,7 +1514,7 @@ canvas {
   grid-template-columns: 2fr 1fr 1fr 1.25fr;
   gap: 36px;
   padding-bottom: 44px;
-  border-bottom: 1px solid rgba(168, 85, 247, 0.15);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .footer-col {
@@ -1554,7 +1534,7 @@ canvas {
   object-fit: contain;
   pointer-events: none;
   user-select: none;
-  filter: drop-shadow(0 2px 12px rgba(139, 92, 246, 0.3));
+  filter: none;
   transition: transform 0.2s ease;
 }
 
@@ -1609,7 +1589,7 @@ canvas {
 }
 
 .footer-nav-list a:hover {
-  color: #d8b4fe;
+  color: #ffffff;
 }
 
 /* Mirrors with SVG Logos */
@@ -1644,7 +1624,7 @@ canvas {
 .developer-profile-item {
   margin-top: 10px;
   padding-top: 12px;
-  border-top: 1px solid rgba(168, 85, 247, 0.15);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .developer-card-link {
@@ -1660,8 +1640,8 @@ canvas {
   height: 36px;
   border-radius: 50%;
   padding: 2px;
-  border: 2px solid rgba(168, 85, 247, 0.6);
-  background: #1e1338;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  background: #141b2d;
   overflow: hidden;
   flex-shrink: 0;
   transition: transform 0.2s ease, border-color 0.2s ease;
@@ -1669,7 +1649,7 @@ canvas {
 
 .developer-card-link:hover .developer-avatar-ring {
   transform: scale(1.08);
-  border-color: #c084fc;
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
 .developer-avatar-img {
@@ -1694,13 +1674,13 @@ canvas {
 }
 
 .developer-card-link:hover .developer-title {
-  color: #d8b4fe;
+  color: #ffffff;
 }
 
 .developer-handle {
   font-size: 11px;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  color: rgba(216, 180, 254, 0.8);
+  color: #94a3b8;
 }
 
 /* Bottom Copyright Row */
@@ -1741,13 +1721,13 @@ canvas {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: rgba(147, 51, 234, 0.9);
+  background: rgba(30, 41, 59, 0.9);
   color: #ffffff;
-  border: 1px solid rgba(216, 180, 254, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   font-size: 18px;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 8px 24px rgba(88, 28, 135, 0.5);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
@@ -1764,7 +1744,7 @@ canvas {
 
 .back-to-top-btn:hover {
   transform: translateY(-3px) scale(1.05);
-  background: #9333ea;
+  background: #334155;
 }
 
 @media (max-width: 900px) {
@@ -1775,74 +1755,6 @@ canvas {
   .footer-desc {
     max-width: 100%;
   }
-}
-
-/* Stage to Footer Deep Dive Transition Pill (matching junksidetm.github.io) */
-.stage-footer-dive {
-  position: absolute;
-  bottom: 14px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 15;
-  pointer-events: auto;
-  display: flex;
-  justify-content: center;
-}
-
-.deep-dive-btn {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  text-decoration: none;
-  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.deep-dive-btn:hover {
-  transform: translateY(-2px);
-}
-
-.deep-dive-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 7px 20px;
-  border-radius: 9999px;
-  background: linear-gradient(90deg, rgba(88, 28, 135, 0.92) 0%, rgba(25, 19, 51, 0.96) 50%, rgba(88, 28, 135, 0.92) 100%);
-  border: 1.5px solid rgba(192, 132, 252, 0.45);
-  box-shadow: 0 0 20px rgba(139, 92, 246, 0.35);
-  color: #ffffff;
-  font-size: 11.5px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  transition: all 0.25s ease;
-}
-
-.deep-dive-btn:hover .deep-dive-pill {
-  border-color: rgba(216, 180, 254, 0.8);
-  box-shadow: 0 0 30px rgba(168, 85, 247, 0.6);
-}
-
-.deep-dive-arrow {
-  color: #d8b4fe;
-  animation: bounce-gentle 2s infinite ease-in-out;
-}
-
-@keyframes bounce-gentle {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(3px); }
-}
-
-.deep-dive-sub {
-  font-size: 9.5px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  color: rgba(216, 180, 254, 0.8);
-  letter-spacing: 0.3px;
 }
 
 /* =========================================================================
@@ -1869,12 +1781,6 @@ canvas {
 
 .low-end-perf .speech-bubble {
   background: #f8fafc !important;
-}
-
-@media (max-width: 900px) {
-  .stage-footer-dive {
-    display: none; /* Keep mobile viewport clean for controls */
-  }
 }
 
 

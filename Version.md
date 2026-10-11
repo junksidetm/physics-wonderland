@@ -96,3 +96,12 @@
   - `.github/workflows/deploy.yml`: Updated push trigger and split into build/deploy jobs for reliable automatic execution on commit.
   - `Version.md`: Appended tracking entry.
 - **Status**: 100% (Completed & Synced)
+
+## [2026-10-11 19:10:00 IST] - Restoration of Native Layout, Deep Dive Button Removal & Neutral Dark Surface Alignment
+- **Action**: Restored the original unconstrained native layout by removing the `.sim-stage` wrapper, removed the deep dive button, eliminated the purple radial background gradient in favor of a clean dark canvas (`#090d16`), and removed purple glows and halos across the footer.
+- **Files Modified**:
+  - `index.html`: Removed `<main class="sim-stage">` wrapper and `.stage-footer-dive` deep dive button, removed `.codeium-skyline-halo`, keeping all simulation components direct children of `body` as in the original design.
+  - `app.js`: Removed `#btn-deep-dive` event listener and updated back-to-top handler to use `window.scrollTo`.
+  - `style.css`: Set `body` background to clean `#090d16`, removed `.sim-stage` rules, removed deep dive styles, disabled skyline halo, set skyline vector and banner filter to `none`, and styled footer with neutral clean highlights.
+  - `Version.md`: Appended tracking entry.
+- **Status**: 100% (Completed)
